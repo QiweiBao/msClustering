@@ -1,2 +1,2 @@
 # msClustering
-Clustering data representing one method each line.
+Normalize, cluster and evaluate data.
