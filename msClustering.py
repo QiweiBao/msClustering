@@ -4,6 +4,8 @@ import numpy as np
 from scipy.cluster.hierarchy import cophenet
 from scipy.spatial.distance import pdist
 import re
+from pylab import *
+from scipy.cluster.vq import *
 
 #read data
 def fileread(dirname):
@@ -25,16 +27,6 @@ def fileread(dirname):
 			tmp = []
 	X = np.array(X)
 	return X
-
-'''
-for method in read:
-	for data in method:
-		if isinstance(data, Numbers.number):
-			tmp.append(float(data))
-
-	X.append(tmp)
-	tmp = []
-X = np.array(X)'''
 
 def normalization(X):
 	maxdata = 0.0
@@ -136,6 +128,21 @@ def MeanandDev(X):
 		sca_line = []
 		tmpsum, avgtmp, times, dev = 0.0, 0, 0, 0
 	return Sca
+
+#K-means algorithm, inputs are features and number of clusters to take
+def createKmeans(X):
+	centroids, variance = kmeans(X, 3)
+	code, distance = vq(X, centroids)
+	figure()
+	ndx = where(code==0)[0]
+	plot(X[ndx,0], X[ndx,1],'*')
+	ndx = where(code==1)[0]
+	plot(X[ndx, 0],X[ndx,1], 'r.')
+	ndx = where(code==2)[0]
+	plot(X[ndx, 0],X[ndx,1], 'y.')
+	plot(centroids[:, 0],centroids[:, 1], 'go')
+	axis('off')
+	show()
 
 def main():
 	dirname = "data.txt"
