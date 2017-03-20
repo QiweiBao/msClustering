@@ -27,34 +27,11 @@ dir11 = "./Inputdata/2702de3370e40c30b4dfc3b5d81981c3564e1d2f.txt"
 dir12 = "./Inputdata/591b40a08e64e079d1977db6dce5d28c21f8bf7b.txt"
 dir13 = "./Inputdata/b1bd32bf60d9f64d071f970fc90ed0b6f2c8e6ae.txt"
 
-'''def fileread(dirname):
-	tmp = []
-	X = []
-	file = open(dirname)
-	#Indexmark = ""
-	while True:
-		read = file.readline()
-		if not read:
-			break
-		elif not re.search('.*([a-zA-Z]+).*', read):
-			for s in read.split():
-				order.append(s)
-		else:
-			method = read.split()
-			for data in method:
-				if not re.search('.*([a-zA-Z]+).*', data):
-					tmp.append(data)
-			X.append(tmp)
-			tmp = []
-			#Indexmark = ""
-	X = np.array(X)
-	return X'''
-
+#read data
 def fileread(dirname):
 	tmp = []
 	X = []
 	file = open(dirname)
-	#Indexmark = ""
 	while True:
 		read = file.readline()
 		if not read:
@@ -65,13 +42,12 @@ def fileread(dirname):
 		else:
 			method = read.split()
 			for data in method:
-				#if not re.search('.*([a-zA-Z]+).*', data):
 				tmp.append(data)
 			X.append(tmp)
 			tmp = []
-			#Indexmark = ""
 	return X
 
+#get list of all the method names
 def methodorder(dirname):
 	file = open(dirname)
 	while True:
@@ -85,6 +61,7 @@ def methodorder(dirname):
 					method.append(data)
 	return method
 
+#If one method exist in the list of method names but not in one version, data of this method in this HTML file should be all zero.
 def insertzero(X):
 	tmp = []
 	res = []
@@ -100,6 +77,7 @@ def insertzero(X):
 			res.append(tmp)
 	return res
 
+#Axisymmetric reverse the matrix so that each line represent to one HTML webpage.
 def reverse(X):
 	tmp = []
 	res = []
@@ -112,6 +90,7 @@ def reverse(X):
 	res = np.array(res)
 	return res
 
+#Get list of method names from all files.
 def methodname(dir0, dir1, dir2, dir3, dir4, dir5, dir6, dir7, dir8, dir9, dir10, dir11, dir12, dir13):
 	index = 0
 	method_init = []
@@ -146,6 +125,7 @@ def methodname(dir0, dir1, dir2, dir3, dir4, dir5, dir6, dir7, dir8, dir9, dir10
 	method_init = merge(method_init, method_list_tmp)
 	return method_init
 
+#read method names from each file
 def readmethod(dir):
 	file = open(dir)
 	while True:
@@ -160,6 +140,7 @@ def readmethod(dir):
 	method_list_tmp.sort()
 	return method_list_tmp
 
+#merge 2 methods
 def merge(m1, m2):
 	for m in range(len(m1)):
 		for n in range(len(m2)):
@@ -168,6 +149,7 @@ def merge(m1, m2):
 					m1.insert(m, m2[n])
 	return m1
 
+#delete method names
 def deleteword(X):
 	#todo
 	res, tmp = [], []
@@ -180,18 +162,6 @@ def deleteword(X):
 	res = np.array(res)
 	return res
 
-def createKmeans(X):
-	centroids, variance = kmeans(X, 3)
-	code, distance = vq(X, centroids)
-	figure()
-	ndx = where(code==0)[0]
-	plot(X[ndx,0], X[ndx,1],'*')
-	ndx = where(code==1)[0]
-	plot(X[ndx, 0],X[ndx,1], 'r.')
-	plot(centroids[:, 0],centroids[:, 1], 'go')
-	axis('off')
-	show()
-
 if __name__ == "__main__":
 	X = fileread(dir7)
 	method_list = methodname(dir0, dir1, dir2, dir3, dir4, dir5, dir6, dir7, dir8, dir9, dir10, dir11, dir12, dir13)
@@ -203,5 +173,3 @@ if __name__ == "__main__":
 	cophenet = msClustering.CophenetEvaluate(Cl_result, X)
 	print cophenet
 	msClustering.drawHierarchical(Cl_result)
-
-	#createKmeans(X)
