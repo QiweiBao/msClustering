@@ -12,6 +12,7 @@ def fileread(dirname):
 	tmp = []
 	X = []
 	file = open(dirname)
+	Indexmark = ""
 	while True:
 		read = file.readline()
 		if not read:
@@ -19,12 +20,16 @@ def fileread(dirname):
 		else:
 			method = read.split()
 			for data in method:
-				if  re.search('.*([a-zA-Z]+).*', data):
+				'''if  re.search('.*([a-zA-Z]+).*', data):
+					continue'''
+				if Indexmark == "":
+					Indexmark = data
 					continue
 				else:
 					tmp.append(float(data))
 			X.append(tmp)
 			tmp = []
+			Indexmark = ""
 	X = np.array(X)
 	return X
 
@@ -45,6 +50,7 @@ def normalization(X):
 			tmp.append(data)
 		res.append(tmp)
 		tmp = []
+	res = np.array(res)
 	return res
 
 
@@ -144,16 +150,14 @@ def createKmeans(X):
 	axis('off')
 	show()
 
-def main():
-	dirname = "data.txt"
+if __name__ == "__main__":
+	dirname = "./Inputdata/data.txt"
 	X = fileread(dirname)
 	X = normalization(X)
 	Cl_result = HierarchicalCluster(X)
 	cophenet = CophenetEvaluate(Cl_result, X)
 	print cophenet
-	#drawHierarchical(Cl_result)
-	Sca = MeanandDev(X)
-	drawScatter(zip(*Sca)[0], zip(*Sca)[1])
-
-if __name__ == "__main__":
-	main()
+	drawHierarchical(Cl_result)
+	#createKmeans(X)
+	#Sca = MeanandDev(X)
+	#drawScatter(zip(*Sca)[0], zip(*Sca)[1])
