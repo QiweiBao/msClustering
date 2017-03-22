@@ -1,4 +1,9 @@
-# -*- coding: ascii -*-
+'''
+--------------------------------------
+	Created by Qiwei Bao on 03/22/2017
+--------------------------------------
+'''
+
 from matplotlib import pyplot as plt
 from scipy.cluster.hierarchy import dendrogram, linkage
 import numpy as np
@@ -71,18 +76,24 @@ def merge(m1, m2):
 
 #Write method list into a text.
 def writeMethodList(method_list, pathwrite):
-    output = open(pathwrite, 'wb+')
-    for i in method_list:
-        output.write(str(i))
-        output.write("\n")
-    output.close()
+	clearMethodList(pathwrite)
+	output = open(pathwrite, 'wb+')
+	for i in method_list:
+		output.write(str(i))
+		output.write("\n")
+	output.close()
 
-if __name__ == "__main__":
-	#Testbenches
-	#X = fileread(dir7)
+#clear method name list before write
+def clearMethodList(pathwrite):
+	if os.path.isfile(pathwrite):
+		os.remove(pathwrite)
+
+def main():
 	path = "./InputData/processed_data_largesize" 
 	pathwrite = "./InputData/processed_data_largesize/MethodNameList.txt" 
 	filenames = readfilelist(path)
-
 	method_list = methodname(filenames)
 	writeMethodList(method_list, pathwrite)
+
+if __name__ == "__main__":
+	main()
