@@ -12,7 +12,7 @@ order = []
 method = []
 method_list = []
 method_list_tmp = []
-dir0 = "./Inputdata/05bc443e7e516b9767f6220284d75e2e2a704c1a.txt"
+'''dir0 = "./Inputdata/05bc443e7e516b9767f6220284d75e2e2a704c1a.txt"
 dir1 = "./Inputdata/0bae9c6be8569347f743d07138d0afcb32ceebd6.txt"
 dir2 = "./Inputdata/2702de3370e40c30b4dfc3b5d81981c3564e1d2f.txt"
 dir3 = "./Inputdata/28747b348493ecb174e710f802b8ab1e1b806ca2.txt"
@@ -25,7 +25,7 @@ dir9 = "./Inputdata/79f11c1a32806d2d3b2b48002c6423280da96f0a.txt"
 dir10 = "./Inputdata/9a0020664ed21d9488647c1ae77194a1cce493ec.txt"
 dir11 = "./Inputdata/b1bd32bf60d9f64d071f970fc90ed0b6f2c8e6ae.txt"
 dir12 = "./Inputdata/dc53d700f53c9b925fc6084ba38cb16c7a880fee.txt"
-dir13 = "./Inputdata/f4f82d64b802e98101542a270d2b41afd667a9e7.txt"
+dir13 = "./Inputdata/f4f82d64b802e98101542a270d2b41afd667a9e7.txt"'''
 
 #read data
 def fileread(dirname):
@@ -48,8 +48,9 @@ def fileread(dirname):
 	return X
 
 #get list of all the method names
-def methodorder(dirname):
+def method_read(dirname):
 	file = open(dirname)
+	res = []
 	while True:
 		read = file.readline()
 		if not read:
@@ -58,11 +59,11 @@ def methodorder(dirname):
 			method = read.split()
 			for data in method:
 				if re.search('.*([a-zA-Z]+).*', data):
-					method.append(data)
-	return method
+					res.append(data)
+	return res
 
 #If one method exist in the list of method names but not in one version, data of this method in this HTML file should be all zero.
-def insertzero(X):
+def insertzero(X, method_list):
 	tmp = []
 	res = []
 	zero = []
@@ -86,7 +87,7 @@ def insertzero(X):
 def reverse(X):
 	tmp = []
 	res = []
-	for init in range(1, 51):
+	for init in range(61, 71):
 		index = order.index(str(init))
 		for i in X:
 			tmp.append(float(i[index]))
@@ -94,65 +95,6 @@ def reverse(X):
 		tmp = []
 	res = np.array(res)
 	return res
-
-#Get list of method names from all files.
-def methodname(dir0, dir1, dir2, dir3, dir4, dir5, dir6, dir7, dir8, dir9, dir10, dir11, dir12, dir13):
-	index = 0
-	method_init = []
-	file = open(dir0)
-	while True:
-		read = file.readline()
-		if not read:
-			break
-		else:
-			method = read.split()
-			for data in method:
-				if re.search('.*([a-zA-Z]+).*', data):
-					method_init.append(data)
-	method_init.sort()
-	readmethod(dir1)
-	method_init = merge(method_init, method_list_tmp)
-	readmethod(dir2)
-	method_init = merge(method_init, method_list_tmp)
-	readmethod(dir3)
-	method_init = merge(method_init, method_list_tmp)
-	readmethod(dir4)
-	method_init = merge(method_init, method_list_tmp)
-	readmethod(dir5)
-	method_init = merge(method_init, method_list_tmp)
-	readmethod(dir6)
-	method_init = merge(method_init, method_list_tmp)
-	readmethod(dir7)
-	method_init = merge(method_init, method_list_tmp)
-	readmethod(dir8)
-	method_init = merge(method_init, method_list_tmp)
-	readmethod(dir9)
-	method_init = merge(method_init, method_list_tmp)
-	return method_init
-
-#read method names from each file
-def readmethod(dir):
-	file = open(dir)
-	while True:
-		read = file.readline()
-		if not read:
-			break
-		else:
-			method = read.split()
-			for data in method:
-				if re.search('.*([a-zA-Z]+).*', data):
-					method_list_tmp.append(data)
-	method_list_tmp.sort()
-	return method_list_tmp
-
-#merge 2 methods
-def merge(m1, m2):
-	for m in range(len(m1)):
-		for n in range(len(m2)):
-			if m1[m] != m2[n] and m2[n] not in m1:
-				if m1[m] > m2[n]:
-					m1.insert(m, m2[n])
-	return m1
 
 #delete method names
 def deleteword(X):
@@ -168,10 +110,12 @@ def deleteword(X):
 	return res
 
 if __name__ == "__main__":
-	X = fileread(dir4)
-	method_list = methodname(dir0, dir1, dir2, dir3, dir4, dir5, dir6, dir7, dir8, dir9, dir10, dir11, dir12, dir13)
-
-	X = insertzero(X)
+	Tobe_Cluster_dir = "./Inputdata/processed_data_largesize/3116d69c332f3f2a8ae7020fdd997cdba81f7854.txt"
+	X = fileread(Tobe_Cluster_dir)
+	method_name_path = "./InputData/processed_data_largesize/MethodNameList.txt" 
+	method_list = method_read(method_name_path)
+	
+	X = insertzero(X, method_list)
 	X = deleteword(X)
 	X = reverse(X)
 	Cl_result = msClustering.HierarchicalCluster(X)
