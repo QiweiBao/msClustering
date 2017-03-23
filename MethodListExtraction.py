@@ -1,6 +1,6 @@
 '''
 --------------------------------------
-	Created by Qiwei Bao on 03/22/2017
+    Created by Qiwei Bao on 03/22/2017
 --------------------------------------
 '''
 
@@ -26,7 +26,7 @@ def readfilelist(path):
 	res = []
 	for filename in files:
 		if ("MethodNameList.txt" not in filename) and (".txt" in filename):
-			filename = "./InputData/processed_data_largesize/" + filename
+			filename = path + filename
 			res.append(filename)
 	return res
 
@@ -89,8 +89,8 @@ def clearMethodList(pathwrite):
 		os.remove(pathwrite)
 
 def main():
-	path = "./InputData/processed_data_largesize" 
-	pathwrite = "./InputData/processed_data_largesize/MethodNameList.txt" 
+	path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/" 
+	pathwrite = path  + "MethodNameList.txt" 
 	filenames = readfilelist(path)
 	method_list = methodname(filenames)
 	writeMethodList(method_list, pathwrite)
