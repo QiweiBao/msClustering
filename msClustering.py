@@ -6,6 +6,7 @@ from scipy.spatial.distance import pdist
 import re
 from pylab import *
 from scipy.cluster.vq import *
+import seaborn as sns; sns.set()
 
 #read data
 def fileread(dirname):
@@ -149,6 +150,11 @@ def createKmeans(X):
 	plot(centroids[:, 0],centroids[:, 1], 'go')
 	axis('off')
 	show()
+	
+#use seaborn to show result visualize.
+def clu_heatmap(X):
+	g = sns.clustermap(X, standard_scale=1)
+	sns.plt.show()
 
 if __name__ == "__main__":
 	dirname = "./Inputdata/data.txt"
