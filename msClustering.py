@@ -1,15 +1,18 @@
-import msClustering
+import ClusteringCollection
 import data_extract
 import MethodListExtraction
 import os
+from sklearn.preprocessing import StandardScaler
+
 
 def createMethodList(path):
-    #path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/" 
-    pathwrite = path  + "MethodNameList.txt" 
+    # path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
+    pathwrite = path + "MethodNameList.txt"
     filenames = MethodListExtraction.readfilelist(path)
     method_list = MethodListExtraction.methodname(filenames)
     MethodListExtraction.writeMethodList(method_list, pathwrite)
     print "Method list created."
+
 
 def dataExtract(path, clu_method):
     paths = data_extract.readfilelist(path)
@@ -22,17 +25,20 @@ def dataExtract(path, clu_method):
         X = data_extract.deleteword(X)
         print "original number of methods: " + str(len(X))
 
-        #the second parameter is threshold
+        # the second parameter is threshold
+        # X = data_extract.removeSeldomUsingMethods(X, 0.2)
 
-        X = data_extract.removeSeldomUsingMethods(X, 0.2)
         print "number of methods after removing infrequent methods:" + str(len(X))
         X = data_extract.reverse(X, orderindex)
-        X = msClustering.normalization(X)
+        X = ClusteringCollection.normalization(X)
+
+        # using scikit to normalize
+        # X = StandardScaler().fit_transform(X)
 
         dir_pieces = Tobe_Cluster_dir.split('/')
-        png_name = dir_pieces[len(dir_pieces)-1]
-        png_name = png_name[:len(png_name)-4] + ".png"
-        pic_dir = Tobe_Cluster_dir[:len(Tobe_Cluster_dir) - len(dir_pieces[len(dir_pieces)-1])] + "pics/"
+        png_name = dir_pieces[len(dir_pieces) - 1]
+        png_name = png_name[:len(png_name) - 4] + ".png"
+        pic_dir = Tobe_Cluster_dir[:len(Tobe_Cluster_dir) - len(dir_pieces[len(dir_pieces) - 1])] + "pics/"
         if not os.path.exists(pic_dir):
             os.mkdir(pic_dir)
         pic_dir += png_name
@@ -41,26 +47,32 @@ def dataExtract(path, clu_method):
             clu_Hierarchical(X, pic_dir)
         elif clu_method is "Kmeans":
             clu_Kmeans(X)
+        elif clu_method is "DBSCAN":
+            clu_DBSCAN(X, pic_dir)
+
 
 def clu_Hierarchical(X, pic_dir):
-        # hierarchical clustering
-        Cl_result = msClustering.HierarchicalCluster(X)
-        cophenet = msClustering.CophenetEvaluate(Cl_result, X)
-        print cophenet
+    # hierarchical clustering
+    Cl_result = ClusteringCollection.HierarchicalCluster(X)
+    cophenet = ClusteringCollection.CophenetEvaluate(Cl_result, X)
+    print cophenet
 
-        msClustering.drawHierarchical(Cl_result, pic_dir)
+    ClusteringCollection.drawHierarchical(Cl_result, pic_dir)
+
 
 def clu_Kmeans(X):
-        # kmeans clustering
-        msClustering.createKmeans(X)
+    # kmeans clustering
+    ClusteringCollection.createKmeans(X)
 
-def clu_spectral(X):
-    # implementation of spectral here
-    return
+
+def clu_DBSCAN(X, pic_dir):
+    Cl_result = ClusteringCollection.DBSCAN(X, pic_dir)
+    # ClusteringCollection.drawDBSCAN(Cl_result, pic_dir)
+
 
 if __name__ == "__main__":
     path = "/home/majunqi/research/result/test_automation/processed_data_largesize/"
     createMethodList(path)
-    #choose clustering method
-    clu_method = "Hierarchical"
-    dataExtract(path, clu_method) 
+    # choose clustering method
+    clu_method = "DBSCAN"
+    dataExtract(path, clu_method)

@@ -8,6 +8,9 @@ from pylab import *
 from scipy.cluster.vq import *
 import seaborn as sns;
 
+from sklearn import cluster
+from sklearn import metrics
+
 sns.set()
 
 
@@ -116,7 +119,7 @@ def drawHierarchical(Cl_result, picdir):
     # fancy_dendrogram(Cl_result, truncate_mode='lastp', p=30, leaf_rotation=90., leaf_font_size=12., show_contracted=True, annotate_above=10)
     # show picture after drawing
     # plt.show()
-    savefig(picdir) 
+    savefig(picdir)
 
 # Calculate mean and deviation to describe the input metrix
 def MeanandDev(X):
@@ -162,10 +165,61 @@ def createKmeans(X):
     axis('off')
     show()
 
+
 # use seaborn to show result visualize.
-def clu_heatmap(X):
+def Heatmap(X):
     g = sns.clustermap(X, standard_scale=1)
     sns.plt.show()
+
+
+def Spectral_Cluster(X):
+    spectral = cluster.SpectralClustering(n_clusters=2,
+                                          eigen_solver='arpack',
+                                          affinity="nearest_neighbors")
+
+
+def DBSCAN(X, pic_dir):
+    db = cluster.DBSCAN(eps=0.3, min_samples=10).fit(X)
+    core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
+    core_samples_mask[db.core_sample_indices_] = True
+    labels = db.labels_
+
+    # Number of clusters in labels, ignoring noise if present.
+    n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+
+    # Black removed and is used for noise instead.
+    unique_labels = set(labels)
+    colors = plt.cm.Spectral(np.linspace(0, 1, len(unique_labels)))
+    for k, col in zip(unique_labels, colors):
+        if k == -1:
+            # Black used for noise.
+            col = 'k'
+
+        class_member_mask = (labels == k)
+
+        xy = X[class_member_mask & core_samples_mask]
+        plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
+                 markeredgecolor='k', markersize=14)
+
+        xy = X[class_member_mask & ~core_samples_mask]
+        plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
+                 markeredgecolor='k', markersize=6)
+
+    plt.title('Estimated number of clusters: %d' % n_clusters_)
+    # plt.show()
+
+    savefig(pic_dir)
+    # print('Estimated number of clusters: %d' % n_clusters_)
+    # print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels_true, labels))
+    # print("Completeness: %0.3f" % metrics.completeness_score(labels_true, labels))
+    # print("V-measure: %0.3f" % metrics.v_measure_score(labels_true, labels))
+    # print("Adjusted Rand Index: %0.3f"
+    #       % metrics.adjusted_rand_score(labels_true, labels))
+    # print("Adjusted Mutual Information: %0.3f"
+    #       % metrics.adjusted_mutual_info_score(labels_true, labels))
+    # print("Silhouette Coefficient: %0.3f"
+    #       % metrics.silhouette_score(X, labels))
+
 
 if __name__ == "__main__":
     '''dirname = "/Users/qiweibao/Code/Python/Inputdata/data.txt"
