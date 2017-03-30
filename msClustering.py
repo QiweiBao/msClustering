@@ -28,26 +28,27 @@ def dataExtract(path, clu_method):
         X = data_extract.reverse(X, orderindex)
         X = msClustering.normalization(X)
 
-        if clu_method is "Hierarchical":
-        	clu_Hierarchical(X)
-        elif clu_method is "Kmeans":
-        	clu_Kmeans(X)
-        
-
-def clu_Hierarchical(X):
-        # hierarchical clustering
-        Cl_result = msClustering.HierarchicalCluster(X)
-        cophenet = msClustering.CophenetEvaluate(Cl_result, X)
-        print cophenet
-
-        dir_pieces = Tobe_Cluster_dir.split('/')
+		dir_pieces = Tobe_Cluster_dir.split('/')
         png_name = dir_pieces[len(dir_pieces)-1]
         png_name = png_name[:len(png_name)-4] + ".png"
         pic_dir = Tobe_Cluster_dir[:len(Tobe_Cluster_dir) - len(dir_pieces[len(dir_pieces)-1])] + "pics/"
         if not os.path.exists(pic_dir):
             os.mkdir(pic_dir)
-        print pic_dir+png_name
-        msClustering.drawHierarchical(Cl_result, pic_dir+png_name)
+        pic_dir += png_name
+
+        if clu_method is "Hierarchical":
+        	clu_Hierarchical(X, pic_dir)
+        elif clu_method is "Kmeans":
+        	clu_Kmeans(X)
+        
+
+def clu_Hierarchical(X, pic_dir):
+        # hierarchical clustering
+        Cl_result = msClustering.HierarchicalCluster(X)
+        cophenet = msClustering.CophenetEvaluate(Cl_result, X)
+        print cophenet
+
+        msClustering.drawHierarchical(Cl_result, pic_dir)
 
 def clu_Kmeans(X):
         # kmeans clustering
@@ -58,4 +59,4 @@ if __name__ == "__main__":
 	createMethodList(path)
 	#choose clustering method
 	clu_method = "Hierarchical"
-	dataExtract(path, clu_method)
+	dataExtract(path, clu_method) 
