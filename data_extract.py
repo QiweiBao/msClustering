@@ -147,7 +147,6 @@ def removeSeldomUsingMethods(X, threshold):
         for html in method:
             total = total + float(html)
             num += 1
-        # this can be set automatically
         if total/num >= threshold:
             new_X.append(method)
     return new_X
@@ -164,6 +163,9 @@ if __name__ == "__main__":
         X = insertzero(X, method_list, orderindex)
         X = deleteword(X)
         print "original number of methods: " + str(len(X))
+
+        #the second parameter is threshold
+
         X = removeSeldomUsingMethods(X, 0.2)
         print "number of methods after removing infrequent methods:" + str(len(X))
         X = reverse(X, orderindex)
