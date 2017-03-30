@@ -170,7 +170,7 @@ if __name__ == "__main__":
         print "number of methods after removing infrequent methods:" + str(len(X))
         X = reverse(X, orderindex)
         X = msClustering.normalization(X)
-        
+
         # hierarchical clustering
         Cl_result = msClustering.HierarchicalCluster(X)
         cophenet = msClustering.CophenetEvaluate(Cl_result, X)

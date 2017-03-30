@@ -1,6 +1,7 @@
 import msClustering
 import data_extract
 import MethodListExtraction
+import os
 
 def createMethodList(path):
 	#path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/" 
@@ -40,7 +41,6 @@ def dataExtract(path, clu_method):
         	clu_Hierarchical(X, pic_dir)
         elif clu_method is "Kmeans":
         	clu_Kmeans(X)
-        
 
 def clu_Hierarchical(X, pic_dir):
         # hierarchical clustering
@@ -54,8 +54,12 @@ def clu_Kmeans(X):
         # kmeans clustering
         msClustering.createKmeans(X)
 
+def clu_spectral(X):
+    # implementation of spectral here
+    return
+
 if __name__ == "__main__":
-	path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/" 
+	path = "/home/majunqi/research/result/test_automation/processed_data_largesize/"
 	createMethodList(path)
 	#choose clustering method
 	clu_method = "Hierarchical"
