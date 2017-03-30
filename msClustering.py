@@ -4,12 +4,12 @@ import MethodListExtraction
 import os
 
 def createMethodList(path):
-	#path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/" 
-	pathwrite = path  + "MethodNameList.txt" 
-	filenames = MethodListExtraction.readfilelist(path)
-	method_list = MethodListExtraction.methodname(filenames)
-	MethodListExtraction.writeMethodList(method_list, pathwrite)
-	print "Method list created."
+    #path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/" 
+    pathwrite = path  + "MethodNameList.txt" 
+    filenames = MethodListExtraction.readfilelist(path)
+    method_list = MethodListExtraction.methodname(filenames)
+    MethodListExtraction.writeMethodList(method_list, pathwrite)
+    print "Method list created."
 
 def dataExtract(path, clu_method):
     paths = data_extract.readfilelist(path)
@@ -29,7 +29,7 @@ def dataExtract(path, clu_method):
         X = data_extract.reverse(X, orderindex)
         X = msClustering.normalization(X)
 
-		dir_pieces = Tobe_Cluster_dir.split('/')
+        dir_pieces = Tobe_Cluster_dir.split('/')
         png_name = dir_pieces[len(dir_pieces)-1]
         png_name = png_name[:len(png_name)-4] + ".png"
         pic_dir = Tobe_Cluster_dir[:len(Tobe_Cluster_dir) - len(dir_pieces[len(dir_pieces)-1])] + "pics/"
@@ -38,9 +38,9 @@ def dataExtract(path, clu_method):
         pic_dir += png_name
 
         if clu_method is "Hierarchical":
-        	clu_Hierarchical(X, pic_dir)
+            clu_Hierarchical(X, pic_dir)
         elif clu_method is "Kmeans":
-        	clu_Kmeans(X)
+            clu_Kmeans(X)
 
 def clu_Hierarchical(X, pic_dir):
         # hierarchical clustering
@@ -59,8 +59,8 @@ def clu_spectral(X):
     return
 
 if __name__ == "__main__":
-	path = "/home/majunqi/research/result/test_automation/processed_data_largesize/"
-	createMethodList(path)
-	#choose clustering method
-	clu_method = "Hierarchical"
-	dataExtract(path, clu_method) 
+    path = "/home/majunqi/research/result/test_automation/processed_data_largesize/"
+    createMethodList(path)
+    #choose clustering method
+    clu_method = "Hierarchical"
+    dataExtract(path, clu_method) 
