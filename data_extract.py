@@ -151,7 +151,7 @@ def removeSeldomUsingMethods(X, threshold):
             new_X.append(method)
     return new_X
 
-
+'''
 if __name__ == "__main__":
     path = "/home/majunqi/research/result/test_automation/processed_data_largesize/"
     paths = readfilelist(path)
@@ -186,4 +186,5 @@ if __name__ == "__main__":
         msClustering.drawHierarchical(Cl_result, pic_dir+png_name)
 
         # kmeans clustering
-        '''msClustering.createKmeans(X)'''
+        # msClustering.createKmeans(X)
+'''

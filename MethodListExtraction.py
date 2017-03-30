@@ -104,5 +104,5 @@ def main():
     writeMethodList(method_list, pathwrite)
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#    main()
