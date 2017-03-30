@@ -96,7 +96,8 @@ def clearMethodList(pathwrite):
 
 
 def main():
-    path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
+    # path = "/home/majunqi/research/result/test_automation/processed_data_largesize"
+    path = "/home/majunqi/research/result/test_automation/processed_data_largesize/"
     pathwrite = path + "MethodNameList.txt"
     filenames = readfilelist(path)
     method_list = methodname(filenames)

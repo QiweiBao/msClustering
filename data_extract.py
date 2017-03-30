@@ -76,10 +76,11 @@ def insertzero(X, method_list):
 def reverse(X):
     tmp = []
     res = []
-    for init in range(61, 71):
+    empty = 0
+    for init in range(0, 1574):
         index = order.index(str(init))
         for i in X:
-            tmp.append(float(i[index]))
+            tmp.append(float(i[index])) if index < len(i) else tmp.append(float(empty))
         res.append(tmp)
         tmp = []
     res = np.array(res)
@@ -101,9 +102,9 @@ def deleteword(X):
 
 
 if __name__ == "__main__":
-    Tobe_Cluster_dir = "./Inputdata/processed_data_largesize/3116d69c332f3f2a8ae7020fdd997cdba81f7854.txt"
+    Tobe_Cluster_dir = "/home/majunqi/research/result/test_automation/processed_data_largesize/0bae9c6be8569347f743d07138d0afcb32ceebd6.txt"
     X = fileread(Tobe_Cluster_dir)
-    method_name_path = "./InputData/processed_data_largesize/MethodNameList.txt"
+    method_name_path = "/home/majunqi/research/result/test_automation/processed_data_largesize/MethodNameList.txt"
     method_list = method_read(method_name_path)
 
     X = insertzero(X, method_list)
@@ -113,3 +114,5 @@ if __name__ == "__main__":
     cophenet = msClustering.CophenetEvaluate(Cl_result, X)
     print cophenet
     msClustering.drawHierarchical(Cl_result)
+
+    #msClustering.createKmeans(X)
