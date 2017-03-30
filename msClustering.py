@@ -103,19 +103,20 @@ def fancy_dendrogram(*args, **kwargs):
 
 
 # Draw hierarchical result
-def drawHierarchical(Cl_result):
+def drawHierarchical(Cl_result, picdir):
     plt.figure(figsize=(50, 10))
     plt.title('Hierarchical Clustering Dendrogram')
     plt.xlabel('functions')
     plt.ylabel('distance')
     # original
-    # dendrogram(Cl_result, leaf_rotation=90., leaf_font_size=8.)
+    dendrogram(Cl_result, leaf_rotation=90., leaf_font_size=8.)
     # truncated for 12 times
     # dendrogram(Cl_result, truncate_mode='lastp', p=12, leaf_rotation=90., leaf_font_size=12., show_contracted=True)
     # show distance
-    fancy_dendrogram(Cl_result, truncate_mode='lastp', p=30, leaf_rotation=90., leaf_font_size=12., show_contracted=True, annotate_above=10)
-    plt.show()
-
+    # fancy_dendrogram(Cl_result, truncate_mode='lastp', p=30, leaf_rotation=90., leaf_font_size=12., show_contracted=True, annotate_above=10)
+    # show picture after drawing
+    # plt.show()
+    savefig(picdir) 
 
 # Calculate mean and deviation to describe the input metrix
 def MeanandDev(X):
@@ -161,21 +162,19 @@ def createKmeans(X):
     axis('off')
     show()
 
-
 # use seaborn to show result visualize.
 def clu_heatmap(X):
     g = sns.clustermap(X, standard_scale=1)
     sns.plt.show()
 
-
 if __name__ == "__main__":
-    dirname = "./Inputdata/data.txt"
+    '''dirname = "/Users/qiweibao/Code/Python/Inputdata/data.txt"
     X = fileread(dirname)
     X = normalization(X)
     Cl_result = HierarchicalCluster(X)
     cophenet = CophenetEvaluate(Cl_result, X)
     print cophenet
-    drawHierarchical(Cl_result)
+    drawHierarchical(Cl_result)'''
 # createKmeans(X)
 # Sca = MeanandDev(X)
 # drawScatter(zip(*Sca)[0], zip(*Sca)[1])
