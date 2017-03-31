@@ -69,6 +69,32 @@ def drawScatter(a, b):
     plt.scatter(a, b)
     plt.show()
 
+#calculate mean for each character (used in PCA)
+def zeroMean(X):      
+    meanVal = np.mean(X , axis = 0)
+    newData = X - meanVal
+    return newData, meanVal
+
+#PCA
+def pca(X , n):
+    newData,meanVal = zeroMean(X)
+
+    #Calculate the Covariance matrix. If rowvar is not zero, each column means one sample; else, each line is one sample.
+    #Here one line is one HTML, so rowvar is 0
+    #return is in ndarray format
+    covMat = np.cov(newData , rowvar = 0)
+    
+
+    eigVals,eigVects = np.linalg.eig(np.mat(covMat))
+    eigValIndice = np.argsort(eigVals)
+    n_eigValIndice = eigValIndice[-1 : - (n + 1) : -1]
+
+    #get index of the largest n eigenvalues
+    n_eigVect = eigVects[: , n_eigValIndice]
+    lowDDataMat = newData * n_eigVect
+    #refactoring data
+    reconMat = (lowDDataMat * n_eigVect.T) + meanVal
+    return lowDDataMat,reconMat
 
 # Hierarchical clustering
 def HierarchicalCluster(X):
@@ -173,6 +199,7 @@ def Heatmap(X):
     g = sns.clustermap(X, standard_scale=1)
     sns.plt.show()
 
+<<<<<<< HEAD
 
 def Spectral_Cluster(X, pic_dir):
     colors = np.array([x for x in 'bgrcmykbgrcmykbgrcmykbgrcmyk'])
@@ -252,10 +279,102 @@ def DBSCAN(X, pic_dir):
     #       % metrics.silhouette_score(X, labels))
 
 
+||||||| merged common ancestors
+=======
+
+def Spectral_Cluster(X, pic_dir):
+    colors = np.array([x for x in 'bgrcmykbgrcmykbgrcmykbgrcmyk'])
+    colors = np.hstack([colors] * 20)
+    Cl_result = cluster.SpectralClustering(n_clusters=2,
+                                          eigen_solver='arpack',
+                                          affinity="nearest_neighbors").fit(X)
+    if hasattr(Cl_result, 'labels_'):
+        y_pred = Cl_result.labels_.astype(np.int)
+    else:
+        y_pred = Cl_result.predict(X)
+
+    clustering_algorithms = [Cl_result]
+    # plot
+    # plt.subplot(4, len(clustering_algorithms), 1)
+    # if i_dataset == 0:
+    #     plt.title(name, size=18)
+
+    #use pca
+    lowDDataMat,reconMat = pca(X,2)
+
+    #plt.scatter(X[:, 0], X[:, 1], color=colors[y_pred].tolist())
+    plt.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], color=colors[y_pred].tolist())
+
+    if hasattr(Cl_result, 'cluster_centers_'):
+        centers = Cl_result.cluster_centers_
+        center_colors = colors[:len(centers)]
+        # plt.scatter(centers[:, 2], centers[:, 4], s=100, c=center_colors)
+        # print centers[:, 0], centers[:, 1]
+    # plt.xlim(-0.5, 0.5)
+    # plt.ylim(-0.5, 0.5)
+    # plt.xticks(())
+    # plt.yticks(())
+    # plt.text(.99, .01, ('%.2fs' % (t1 - t0)).lstrip('0'),
+    #          transform=plt.gca().transAxes, size=15,
+    #          horizontalalignment='right')
+    # plot_num += 1
+
+    # plt.show()
+    savefig(pic_dir)
+
+def DBSCAN(X, pic_dir):
+    db = cluster.DBSCAN(eps=0.3, min_samples=10).fit(X)
+    core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
+    core_samples_mask[db.core_sample_indices_] = True
+    labels = db.labels_
+
+    # Number of clusters in labels, ignoring noise if present.
+    n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+
+    # Black removed and is used for noise instead.
+    unique_labels = set(labels)
+    colors = plt.cm.Spectral(np.linspace(0, 1, len(unique_labels)))
+    for k, col in zip(unique_labels, colors):
+        if k == -1:
+            # Black used for noise.
+            col = 'k'
+
+        class_member_mask = (labels == k)
+
+        xy = X[class_member_mask & core_samples_mask]
+        plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
+                 markeredgecolor='k', markersize=14)
+
+        xy = X[class_member_mask & ~core_samples_mask]
+        plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
+                 markeredgecolor='k', markersize=6)
+
+    plt.title('Estimated number of clusters: %d' % n_clusters_)
+    # plt.show()
+
+    savefig(pic_dir)
+    # print('Estimated number of clusters: %d' % n_clusters_)
+    # print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels_true, labels))
+    # print("Completeness: %0.3f" % metrics.completeness_score(labels_true, labels))
+    # print("V-measure: %0.3f" % metrics.v_measure_score(labels_true, labels))
+    # print("Adjusted Rand Index: %0.3f"
+    #       % metrics.adjusted_rand_score(labels_true, labels))
+    # print("Adjusted Mutual Information: %0.3f"
+    #       % metrics.adjusted_mutual_info_score(labels_true, labels))
+    # print("Silhouette Coefficient: %0.3f"
+    #       % metrics.silhouette_score(X, labels))
+
+
+>>>>>>> 618ff586618986660ee56d00175ee8cc5efed9ff
 if __name__ == "__main__":
     '''dirname = "/Users/qiweibao/Code/Python/Inputdata/data.txt"
     X = fileread(dirname)
     X = normalization(X)
+
+    #use pca
+    lowDDataMat,reconMat = pca(X,2)
+    drawScatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0])
+    
     Cl_result = HierarchicalCluster(X)
     cophenet = CophenetEvaluate(Cl_result, X)
     print cophenet
