@@ -208,7 +208,12 @@ def Spectral_Cluster(X, pic_dir):
     # plt.subplot(4, len(clustering_algorithms), 1)
     # if i_dataset == 0:
     #     plt.title(name, size=18)
-    plt.scatter(X[:, 0], X[:, 1], color=colors[y_pred].tolist())
+
+    #use pca
+    lowDDataMat,reconMat = pca(X,2)
+
+    #plt.scatter(X[:, 0], X[:, 1], color=colors[y_pred].tolist())
+    plt.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], color=colors[y_pred].tolist())
 
     if hasattr(Cl_result, 'cluster_centers_'):
         centers = Cl_result.cluster_centers_
@@ -274,9 +279,12 @@ if __name__ == "__main__":
     '''dirname = "/Users/qiweibao/Code/Python/Inputdata/data.txt"
     X = fileread(dirname)
     X = normalization(X)
+
+    #use pca
     lowDDataMat,reconMat = pca(X,2)
-    drawScatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0])'''
-    '''Cl_result = HierarchicalCluster(X)
+    drawScatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0])
+    
+    Cl_result = HierarchicalCluster(X)
     cophenet = CophenetEvaluate(Cl_result, X)
     print cophenet
     drawHierarchical(Cl_result)'''
