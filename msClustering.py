@@ -31,10 +31,12 @@ def dataExtract(path, clu_method):
 
         print "number of methods after removing infrequent methods:" + str(len(X))
         X = data_extract.reverse(X, orderindex)
-        # X = ClusteringCollection.normalization(X)
+        X = ClusteringCollection.normalization(X)
 
         # using scikit to normalize
-        X = StandardScaler().fit_transform(X)
+        # X = StandardScaler().fit_transform(X)
+
+        output_X(X)
 
         dir_pieces = Tobe_Cluster_dir.split('/')
         png_name = dir_pieces[len(dir_pieces) - 1]
@@ -52,6 +54,15 @@ def dataExtract(path, clu_method):
             clu_DBSCAN(X, pic_dir)
         elif clu_method is "Spectral":
             clu_spectral(X, pic_dir)
+
+def output_X(X):
+    path = "/home/majunqi/research/result/test_automation/processed_data_largesize/X.txt"
+    f = open(path, "w")
+    for row in X:
+        f.writelines("%s " % item for item in row)
+        f.write('\n')
+    f.close()
+
 
 
 def clu_Hierarchical(X, pic_dir):

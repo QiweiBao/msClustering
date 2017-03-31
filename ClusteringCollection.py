@@ -69,32 +69,34 @@ def drawScatter(a, b):
     plt.scatter(a, b)
     plt.show()
 
-#calculate mean for each character (used in PCA)
-def zeroMean(X):      
-    meanVal = np.mean(X , axis = 0)
+
+# calculate mean for each character (used in PCA)
+def zeroMean(X):
+    meanVal = np.mean(X, axis=0)
     newData = X - meanVal
     return newData, meanVal
 
-#PCA
-def pca(X , n):
-    newData,meanVal = zeroMean(X)
 
-    #Calculate the Covariance matrix. If rowvar is not zero, each column means one sample; else, each line is one sample.
-    #Here one line is one HTML, so rowvar is 0
-    #return is in ndarray format
-    covMat = np.cov(newData , rowvar = 0)
-    
+# PCA
+def pca(X, n):
+    newData, meanVal = zeroMean(X)
 
-    eigVals,eigVects = np.linalg.eig(np.mat(covMat))
+    # Calculate the Covariance matrix. If rowvar is not zero, each column means one sample; else, each line is one sample.
+    # Here one line is one HTML, so rowvar is 0
+    # return is in ndarray format
+    covMat = np.cov(newData, rowvar=0)
+
+    eigVals, eigVects = np.linalg.eig(np.mat(covMat))
     eigValIndice = np.argsort(eigVals)
-    n_eigValIndice = eigValIndice[-1 : - (n + 1) : -1]
+    n_eigValIndice = eigValIndice[-1: - (n + 1): -1]
 
-    #get index of the largest n eigenvalues
-    n_eigVect = eigVects[: , n_eigValIndice]
+    # get index of the largest n eigenvalues
+    n_eigVect = eigVects[:, n_eigValIndice]
     lowDDataMat = newData * n_eigVect
-    #refactoring data
+    # refactoring data
     reconMat = (lowDDataMat * n_eigVect.T) + meanVal
-    return lowDDataMat,reconMat
+    return lowDDataMat, reconMat
+
 
 # Hierarchical clustering
 def HierarchicalCluster(X):
@@ -147,6 +149,7 @@ def drawHierarchical(Cl_result, picdir):
     # show picture after drawing
     # plt.show()
     savefig(picdir)
+
 
 # Calculate mean and deviation to describe the input metrix
 def MeanandDev(X):
@@ -204,8 +207,8 @@ def Spectral_Cluster(X, pic_dir):
     colors = np.array([x for x in 'bgrcmykbgrcmykbgrcmykbgrcmyk'])
     colors = np.hstack([colors] * 20)
     Cl_result = cluster.SpectralClustering(n_clusters=2,
-                                          eigen_solver='arpack',
-                                          affinity="nearest_neighbors").fit(X)
+                                           eigen_solver='arpack',
+                                           affinity="nearest_neighbors").fit(X)
     if hasattr(Cl_result, 'labels_'):
         y_pred = Cl_result.labels_.astype(np.int)
     else:
@@ -217,10 +220,10 @@ def Spectral_Cluster(X, pic_dir):
     # if i_dataset == 0:
     #     plt.title(name, size=18)
 
-    #use pca
-    lowDDataMat,reconMat = pca(X,2)
+    # use pca
+    lowDDataMat, reconMat = pca(Cl_result, 2)
 
-    #plt.scatter(X[:, 0], X[:, 1], color=colors[y_pred].tolist())
+    # plt.scatter(X[:, 0], X[:, 1], color=colors[y_pred].tolist())
     plt.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], color=colors[y_pred].tolist())
 
     if hasattr(Cl_result, 'cluster_centers_'):
@@ -239,6 +242,7 @@ def Spectral_Cluster(X, pic_dir):
 
     # plt.show()
     savefig(pic_dir)
+
 
 def DBSCAN(X, pic_dir):
     db = cluster.DBSCAN(eps=0.3, min_samples=10).fit(X)
