@@ -69,22 +69,30 @@ def drawScatter(a, b):
     plt.scatter(a, b)
     plt.show()
 
-#PCA
-#calculate mean for each character
+#calculate mean for each character (used in PCA)
 def zeroMean(X):      
     meanVal = np.mean(X , axis = 0)
     newData = X - meanVal
     return newData, meanVal
+
+#PCA
 def pca(X , n):
     newData,meanVal = zeroMean(X)
 
+    #Calculate the Covariance matrix. If rowvar is not zero, each column means one sample; else, each line is one sample.
+    #Here one line is one HTML, so rowvar is 0
+    #return is in ndarray format
     covMat = np.cov(newData , rowvar = 0)
     
+
     eigVals,eigVects = np.linalg.eig(np.mat(covMat))
     eigValIndice = np.argsort(eigVals)
     n_eigValIndice = eigValIndice[-1 : - (n + 1) : -1]
+
+    #get index of the largest n eigenvalues
     n_eigVect = eigVects[: , n_eigValIndice]
     lowDDataMat = newData * n_eigVect
+    #refactoring data
     reconMat = (lowDDataMat * n_eigVect.T) + meanVal
     return lowDDataMat,reconMat
 
