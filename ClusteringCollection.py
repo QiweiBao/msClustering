@@ -69,6 +69,24 @@ def drawScatter(a, b):
     plt.scatter(a, b)
     plt.show()
 
+#PCA
+#calculate mean for each character
+def zeroMean(X):      
+    meanVal = np.mean(X , axis = 0)
+    newData = X - meanVal
+    return newData, meanVal
+def pca(X , n):
+    newData,meanVal = zeroMean(X)
+
+    covMat = np.cov(newData , rowvar = 0)
+    
+    eigVals,eigVects = np.linalg.eig(np.mat(covMat))
+    eigValIndice = np.argsort(eigVals)
+    n_eigValIndice = eigValIndice[-1 : - (n + 1) : -1]
+    n_eigVect = eigVects[: , n_eigValIndice]
+    lowDDataMat = newData * n_eigVect
+    reconMat = (lowDDataMat * n_eigVect.T) + meanVal
+    return lowDDataMat,reconMat
 
 # Hierarchical clustering
 def HierarchicalCluster(X):
@@ -256,7 +274,9 @@ if __name__ == "__main__":
     '''dirname = "/Users/qiweibao/Code/Python/Inputdata/data.txt"
     X = fileread(dirname)
     X = normalization(X)
-    Cl_result = HierarchicalCluster(X)
+    lowDDataMat,reconMat = pca(X,2)
+    drawScatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0])'''
+    '''Cl_result = HierarchicalCluster(X)
     cophenet = CophenetEvaluate(Cl_result, X)
     print cophenet
     drawHierarchical(Cl_result)'''

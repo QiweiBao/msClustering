@@ -12,8 +12,9 @@ from scipy.spatial.distance import pdist
 import re
 from pylab import *
 from scipy.cluster.vq import *
-import msClustering
+import ClusteringCollection
 import os
+import TestIfCodeWork
 
 order = []
 method = []
@@ -151,11 +152,29 @@ def removeSeldomUsingMethods(X, threshold):
             new_X.append(method)
     return new_X
 
-'''
+
 if __name__ == "__main__":
-    path = "/home/majunqi/research/result/test_automation/processed_data_largesize/"
-    paths = readfilelist(path)
-    for Tobe_Cluster_dir in paths:
+    path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
+    Tobe_Cluster_dir = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/f4f82d64b802e98101542a270d2b41afd667a9e7.txt"
+    #paths = readfilelist(path)
+    X = fileread(Tobe_Cluster_dir)
+    '''method_name_path = path + "MethodNameList.txt"
+    method_list = method_read(method_name_path)
+    orderindex = readmethodnames()
+    X = insertzero(X, method_list, orderindex)'''
+    X = deleteword(X)
+    print "original number of methods: " + str(len(X))
+
+    #the second parameter is threshold
+
+    X = removeSeldomUsingMethods(X, 0.2)
+    print "number of methods after removing infrequent methods:" + str(len(X))
+    X = reverse(X, orderindex)
+    X = ClusteringCollection.normalization(X)
+    print "start"
+    X = TestIfCodeWork.spectural(X)
+
+    '''for Tobe_Cluster_dir in paths:
         X = fileread(Tobe_Cluster_dir)
         method_name_path = path + "MethodNameList.txt"
         method_list = method_read(method_name_path)
