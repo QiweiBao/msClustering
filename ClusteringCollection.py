@@ -151,7 +151,7 @@ def MeanandDev(X):
 
 
 # K-means algorithm, inputs are features and number of clusters to take
-def createKmeans(X):
+def createKmeans(X, picdir):
     centroids, variance = kmeans(X, 3)
     code, distance = vq(X, centroids)
     figure()
@@ -163,7 +163,8 @@ def createKmeans(X):
     plot(X[ndx, 0], X[ndx, 1], 'y.')
     plot(centroids[:, 0], centroids[:, 1], 'go')
     axis('off')
-    show()
+    # show()
+    savefig(picdir)
 
 
 # use seaborn to show result visualize.

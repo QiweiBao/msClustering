@@ -46,7 +46,7 @@ def dataExtract(path, clu_method):
         if clu_method is "Hierarchical":
             clu_Hierarchical(X, pic_dir)
         elif clu_method is "Kmeans":
-            clu_Kmeans(X)
+            clu_Kmeans(X, pic_dir)
         elif clu_method is "DBSCAN":
             clu_DBSCAN(X, pic_dir)
 
@@ -60,9 +60,9 @@ def clu_Hierarchical(X, pic_dir):
     ClusteringCollection.drawHierarchical(Cl_result, pic_dir)
 
 
-def clu_Kmeans(X):
+def clu_Kmeans(X, pic_dir):
     # kmeans clustering
-    ClusteringCollection.createKmeans(X)
+    ClusteringCollection.createKmeans(X, pic_dir)
 
 
 def clu_DBSCAN(X, pic_dir):
@@ -74,5 +74,6 @@ if __name__ == "__main__":
     path = "/home/majunqi/research/result/test_automation/processed_data_largesize/"
     createMethodList(path)
     # choose clustering method
-    clu_method = "DBSCAN"
+    # clu_method = "DBSCAN"
+    clu_method = "Kmeans"
     dataExtract(path, clu_method)
