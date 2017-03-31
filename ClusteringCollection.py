@@ -7,9 +7,10 @@ import re
 from pylab import *
 from scipy.cluster.vq import *
 import seaborn as sns;
+import time
 
 from sklearn import cluster
-from sklearn import metrics
+from sklearn.metrics import consensus_score
 
 sns.set()
 
@@ -173,11 +174,42 @@ def Heatmap(X):
     sns.plt.show()
 
 
-def Spectral_Cluster(X):
-    spectral = cluster.SpectralClustering(n_clusters=2,
+def Spectral_Cluster(X, pic_dir):
+    colors = np.array([x for x in 'bgrcmykbgrcmykbgrcmykbgrcmyk'])
+    colors = np.hstack([colors] * 20)
+    t0 = time.time()
+    Cl_result = cluster.SpectralClustering(n_clusters=2,
                                           eigen_solver='arpack',
-                                          affinity="nearest_neighbors")
+                                          affinity="nearest_neighbors").fit(X)
+    t1 = time.time()
+    if hasattr(Cl_result, 'labels_'):
+        y_pred = Cl_result.labels_.astype(np.int)
+    else:
+        y_pred = Cl_result.predict(X)
 
+    clustering_algorithms = [Cl_result]
+    # plot
+    # plt.subplot(4, len(clustering_algorithms), 1)
+    # if i_dataset == 0:
+    #     plt.title(name, size=18)
+    plt.scatter(X[:, 0], X[:, 1], color=colors[y_pred].tolist(), s=10)
+
+    if hasattr(Cl_result, 'cluster_centers_'):
+        centers = Cl_result.cluster_centers_
+        center_colors = colors[:len(centers)]
+        plt.scatter(centers[:, 0], centers[:, 1], centers[:, 2], centers[:, 3], s=100, c=center_colors)
+        # print centers[:, 0], centers[:, 1]
+    # plt.xlim(-0.5, 0.5)
+    # plt.ylim(-0.5, 0.5)
+    # plt.xticks(())
+    # plt.yticks(())
+    # plt.text(.99, .01, ('%.2fs' % (t1 - t0)).lstrip('0'),
+    #          transform=plt.gca().transAxes, size=15,
+    #          horizontalalignment='right')
+    # plot_num += 1
+
+    plt.show()
+    # savefig(pic_dir)
 
 def DBSCAN(X, pic_dir):
     db = cluster.DBSCAN(eps=0.3, min_samples=10).fit(X)

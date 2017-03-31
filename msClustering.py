@@ -2,6 +2,7 @@ import ClusteringCollection
 import data_extract
 import MethodListExtraction
 import os
+import sklearn
 from sklearn.preprocessing import StandardScaler
 
 
@@ -49,6 +50,8 @@ def dataExtract(path, clu_method):
             clu_Kmeans(X, pic_dir)
         elif clu_method is "DBSCAN":
             clu_DBSCAN(X, pic_dir)
+        elif clu_method is "Spectral":
+            clu_spectral(X, pic_dir)
 
 
 def clu_Hierarchical(X, pic_dir):
@@ -59,6 +62,8 @@ def clu_Hierarchical(X, pic_dir):
 
     ClusteringCollection.drawHierarchical(Cl_result, pic_dir)
 
+def clu_spectral(X, pic_dir):
+    ClusteringCollection.Spectral_Cluster(X, pic_dir)
 
 def clu_Kmeans(X, pic_dir):
     # kmeans clustering
@@ -72,8 +77,10 @@ def clu_DBSCAN(X, pic_dir):
 
 if __name__ == "__main__":
     path = "/home/majunqi/research/result/test_automation/processed_data_largesize/"
-    createMethodList(path)
+    # createMethodList(path)
     # choose clustering method
+    # clu_method = "Hierarchical"
     # clu_method = "DBSCAN"
-    clu_method = "Kmeans"
+    # clu_method = "Kmeans"
+    clu_method = "Spectral"
     dataExtract(path, clu_method)
