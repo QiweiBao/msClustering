@@ -31,10 +31,10 @@ def dataExtract(path, clu_method):
 
         print "number of methods after removing infrequent methods:" + str(len(X))
         X = data_extract.reverse(X, orderindex)
-        X = ClusteringCollection.normalization(X)
+        # X = ClusteringCollection.normalization(X)
 
         # using scikit to normalize
-        # X = StandardScaler().fit_transform(X)
+        X = StandardScaler().fit_transform(X)
 
         dir_pieces = Tobe_Cluster_dir.split('/')
         png_name = dir_pieces[len(dir_pieces) - 1]
