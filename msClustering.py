@@ -90,7 +90,7 @@ def clu_DBSCAN(X, pic_dir):
 
 
 if __name__ == "__main__":
-    path = "/home/majunqi/research/result/test_automation/processed_data_largesize/"
+    path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
     # createMethodList(path)
     # choose clustering method
     # clu_method = "Hierarchical"

@@ -209,6 +209,7 @@ def Spectral_Cluster(X, pic_dir, clusters):
     Cl_result = cluster.SpectralClustering(n_clusters=clusters,
                                            eigen_solver='arpack',
                                            affinity="nearest_neighbors").fit(X)
+    print Cl_result
     if hasattr(Cl_result, 'labels_'):
         y_pred = Cl_result.labels_.astype(np.int)
     else:
@@ -221,15 +222,15 @@ def Spectral_Cluster(X, pic_dir, clusters):
     #     plt.title(name, size=18)
 
     # use pca
-    lowDDataMat, reconMat = pca(Cl_result, clusters)
-
-    # plt.scatter(X[:, 0], X[:, 1], color=colors[y_pred].tolist())
+    lowDDataMat, reconMat = pca(X, 2)
+    #plt.scatter(X[:, 0], X[:, 1], color=colors[y_pred].tolist())
     plt.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], color=colors[y_pred].tolist())
 
     if hasattr(Cl_result, 'cluster_centers_'):
         centers = Cl_result.cluster_centers_
         center_colors = colors[:len(centers)]
-        # plt.scatter(centers[:, 2], centers[:, 4], s=100, c=center_colors)
+
+        plt.scatter(centers[:, 2], centers[:, 4], s=100, c=center_colors)
         # print centers[:, 0], centers[:, 1]
     # plt.xlim(-0.5, 0.5)
     # plt.ylim(-0.5, 0.5)
@@ -291,6 +292,8 @@ if __name__ == "__main__":
     '''dirname = "/Users/qiweibao/Code/Python/Inputdata/data.txt"
     X = fileread(dirname)
     X = normalization(X)
+    outputdir = "/Users/qiweibao/Code/Python/Output.png"
+    Spectral_Cluster(X, outputdir, 1)
 
     #use pca
     lowDDataMat,reconMat = pca(X,2)
