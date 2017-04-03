@@ -203,10 +203,10 @@ def Heatmap(X):
     sns.plt.show()
 
 
-def Spectral_Cluster(X, pic_dir):
+def Spectral_Cluster(X, pic_dir, clusters):
     colors = np.array([x for x in 'bgrcmykbgrcmykbgrcmykbgrcmyk'])
     colors = np.hstack([colors] * 20)
-    Cl_result = cluster.SpectralClustering(n_clusters=1,
+    Cl_result = cluster.SpectralClustering(n_clusters=clusters,
                                            eigen_solver='arpack',
                                            affinity="nearest_neighbors").fit(X)
     if hasattr(Cl_result, 'labels_'):
@@ -221,7 +221,7 @@ def Spectral_Cluster(X, pic_dir):
     #     plt.title(name, size=18)
 
     # use pca
-    lowDDataMat, reconMat = pca(Cl_result, 2)
+    lowDDataMat, reconMat = pca(Cl_result, clusters)
 
     # plt.scatter(X[:, 0], X[:, 1], color=colors[y_pred].tolist())
     plt.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], color=colors[y_pred].tolist())

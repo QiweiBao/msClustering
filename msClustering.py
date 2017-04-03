@@ -15,7 +15,7 @@ def createMethodList(path):
     print "Method list created."
 
 
-def dataExtract(path, clu_method):
+def dataExtract(path, clu_method, clusters):
     paths = data_extract.readfilelist(path)
     for Tobe_Cluster_dir in paths:
         X = data_extract.fileread(Tobe_Cluster_dir)
@@ -31,7 +31,7 @@ def dataExtract(path, clu_method):
 
         print "number of methods after removing infrequent methods:" + str(len(X))
         X = data_extract.reverse(X, orderindex)
-        X = ClusteringCollection.normalization(X)
+        # X = ClusteringCollection.normalization(X)
 
         # using scikit to normalize
         # X = StandardScaler().fit_transform(X)
@@ -54,7 +54,7 @@ def dataExtract(path, clu_method):
         elif clu_method is "DBSCAN":
             clu_DBSCAN(X, pic_dir)
         elif clu_method is "Spectral":
-            clu_spectral(X, pic_dir)
+            clu_spectral(X, pic_dir, clusters)
 
 
 def output_X(X, pic_dir, file_name):
@@ -75,8 +75,8 @@ def clu_Hierarchical(X, pic_dir):
     ClusteringCollection.drawHierarchical(Cl_result, pic_dir)
 
 
-def clu_spectral(X, pic_dir):
-    ClusteringCollection.Spectral_Cluster(X, pic_dir)
+def clu_spectral(X, pic_dir, clusters):
+    ClusteringCollection.Spectral_Cluster(X, pic_dir, clusters)
 
 
 def clu_Kmeans(X, pic_dir):
@@ -97,4 +97,5 @@ if __name__ == "__main__":
     # clu_method = "DBSCAN"
     # clu_method = "Kmeans"
     clu_method = "Spectral"
-    dataExtract(path, clu_method)
+    clusters = 1
+    dataExtract(path, clu_method, clusters)
