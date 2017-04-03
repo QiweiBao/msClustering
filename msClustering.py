@@ -31,7 +31,7 @@ def dataExtract(path, clu_method, clusters):
 
         print "number of methods after removing infrequent methods:" + str(len(X))
         X = data_extract.reverse(X, orderindex)
-        # X = ClusteringCollection.normalization(X)
+        X = ClusteringCollection.normalization(X)
 
         # using scikit to normalize
         # X = StandardScaler().fit_transform(X)
@@ -90,7 +90,8 @@ def clu_DBSCAN(X, pic_dir):
 
 
 if __name__ == "__main__":
-    path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
+    # path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
+    path = "/home/majunqi/research/result/test_automation/processed_data_largesize/"
     # createMethodList(path)
     # choose clustering method
     # clu_method = "Hierarchical"

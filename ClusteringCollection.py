@@ -209,7 +209,7 @@ def Spectral_Cluster(X, pic_dir, clusters):
     Cl_result = cluster.SpectralClustering(n_clusters=clusters,
                                            eigen_solver='arpack',
                                            affinity="nearest_neighbors").fit(X)
-    print Cl_result
+    # print Cl_result
     if hasattr(Cl_result, 'labels_'):
         y_pred = Cl_result.labels_.astype(np.int)
     else:
