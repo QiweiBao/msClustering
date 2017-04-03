@@ -206,7 +206,7 @@ def Heatmap(X):
 def Spectral_Cluster(X, pic_dir):
     colors = np.array([x for x in 'bgrcmykbgrcmykbgrcmykbgrcmyk'])
     colors = np.hstack([colors] * 20)
-    Cl_result = cluster.SpectralClustering(n_clusters=2,
+    Cl_result = cluster.SpectralClustering(n_clusters=1,
                                            eigen_solver='arpack',
                                            affinity="nearest_neighbors").fit(X)
     if hasattr(Cl_result, 'labels_'):

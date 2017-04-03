@@ -27,7 +27,7 @@ def dataExtract(path, clu_method):
         print "original number of methods: " + str(len(X))
 
         # the second parameter is threshold
-        # X = data_extract.removeSeldomUsingMethods(X, 0.2)
+        # X = data_extract.removeSeldomUsingMethods(X, 0.5)
 
         print "number of methods after removing infrequent methods:" + str(len(X))
         X = data_extract.reverse(X, orderindex)
@@ -36,14 +36,15 @@ def dataExtract(path, clu_method):
         # using scikit to normalize
         # X = StandardScaler().fit_transform(X)
 
-        output_X(X)
-
         dir_pieces = Tobe_Cluster_dir.split('/')
         png_name = dir_pieces[len(dir_pieces) - 1]
         png_name = png_name[:len(png_name) - 4] + ".png"
         pic_dir = Tobe_Cluster_dir[:len(Tobe_Cluster_dir) - len(dir_pieces[len(dir_pieces) - 1])] + "pics/"
         if not os.path.exists(pic_dir):
             os.mkdir(pic_dir)
+
+        output_X(X, pic_dir, png_name[:len(png_name) - 10])
+
         pic_dir += png_name
 
         if clu_method is "Hierarchical":
@@ -55,14 +56,14 @@ def dataExtract(path, clu_method):
         elif clu_method is "Spectral":
             clu_spectral(X, pic_dir)
 
-def output_X(X):
-    path = "/home/majunqi/research/result/test_automation/processed_data_largesize/X.txt"
+
+def output_X(X, pic_dir, file_name):
+    path = pic_dir + "X" + file_name + ".txt"
     f = open(path, "w")
     for row in X:
         f.writelines("%s " % item for item in row)
         f.write('\n')
     f.close()
-
 
 
 def clu_Hierarchical(X, pic_dir):
@@ -73,8 +74,10 @@ def clu_Hierarchical(X, pic_dir):
 
     ClusteringCollection.drawHierarchical(Cl_result, pic_dir)
 
+
 def clu_spectral(X, pic_dir):
     ClusteringCollection.Spectral_Cluster(X, pic_dir)
+
 
 def clu_Kmeans(X, pic_dir):
     # kmeans clustering
