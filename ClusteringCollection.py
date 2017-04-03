@@ -11,6 +11,7 @@ import time
 
 from sklearn import cluster
 from sklearn.metrics import consensus_score
+from mpl_toolkits.mplot3d import Axes3D
 
 sns.set()
 
@@ -222,15 +223,21 @@ def Spectral_Cluster(X, pic_dir, clusters):
     #     plt.title(name, size=18)
 
     # use pca
-    lowDDataMat, reconMat = pca(X, 2)
+    #lowDDataMat, reconMat = pca(X, 2)
     #plt.scatter(X[:, 0], X[:, 1], color=colors[y_pred].tolist())
-    plt.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], color=colors[y_pred].tolist())
+    #plt.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], color=colors[y_pred].tolist())
+
+    #3 D
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    lowDDataMat, reconMat = pca(X, 3)
+    ax.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], lowDDataMat[:, 2].ravel().tolist()[0], c = 'r', marker = 'o')
 
     if hasattr(Cl_result, 'cluster_centers_'):
         centers = Cl_result.cluster_centers_
         center_colors = colors[:len(centers)]
 
-        plt.scatter(centers[:, 2], centers[:, 4], s=100, c=center_colors)
+        #plt.scatter(centers[:, 2], centers[:, 4], s=100, c=center_colors)
         # print centers[:, 0], centers[:, 1]
     # plt.xlim(-0.5, 0.5)
     # plt.ylim(-0.5, 0.5)
