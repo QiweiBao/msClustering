@@ -231,7 +231,7 @@ def Spectral_Cluster(X, pic_dir, clusters):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     lowDDataMat, reconMat = pca(X, 3)
-    ax.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], lowDDataMat[:, 2].ravel().tolist()[0], c = 'r', marker = 'o')
+    ax.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], lowDDataMat[:, 2].ravel().tolist()[0], color=colors[y_pred].tolist(), marker = 'o')
 
     if hasattr(Cl_result, 'cluster_centers_'):
         centers = Cl_result.cluster_centers_
@@ -296,12 +296,12 @@ def DBSCAN(X, pic_dir):
 
 
 if __name__ == "__main__":
-    '''dirname = "/Users/qiweibao/Code/Python/Inputdata/data.txt"
+    dirname = "/Users/qiweibao/Code/Python/Inputdata/data.txt"
     X = fileread(dirname)
     X = normalization(X)
     outputdir = "/Users/qiweibao/Code/Python/Output.png"
     Spectral_Cluster(X, outputdir, 1)
-
+'''
     #use pca
     lowDDataMat,reconMat = pca(X,2)
     drawScatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0])
