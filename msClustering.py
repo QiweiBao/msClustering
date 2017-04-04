@@ -15,7 +15,7 @@ def createMethodList(path):
     print "Method list created."
 
 
-def dataExtract(path, clu_method, clusters):
+def dataExtract(path, clu_method, clusters, plot_in_2D=True):
     paths = data_extract.readfilelist(path)
     for Tobe_Cluster_dir in paths:
         X = data_extract.fileread(Tobe_Cluster_dir)
@@ -54,7 +54,7 @@ def dataExtract(path, clu_method, clusters):
         elif clu_method is "DBSCAN":
             clu_DBSCAN(X, pic_dir)
         elif clu_method is "Spectral":
-            clu_spectral(X, pic_dir, clusters)
+            clu_spectral(X, pic_dir, clusters, plot_in_2D)
 
 
 def output_X(X, pic_dir, file_name):
@@ -75,8 +75,8 @@ def clu_Hierarchical(X, pic_dir):
     ClusteringCollection.drawHierarchical(Cl_result, pic_dir)
 
 
-def clu_spectral(X, pic_dir, clusters):
-    ClusteringCollection.Spectral_Cluster(X, pic_dir, clusters)
+def clu_spectral(X, pic_dir, clusters, plot_in_2D):
+    ClusteringCollection.Spectral_Cluster(X, pic_dir, clusters, plot_in_2D)
 
 
 def clu_Kmeans(X, pic_dir):
@@ -99,4 +99,6 @@ if __name__ == "__main__":
     # clu_method = "Kmeans"
     clu_method = "Spectral"
     clusters = 1
-    dataExtract(path, clu_method, clusters)
+    #plot either in 2D or 3D
+    twoD = False
+    dataExtract(path, clu_method, clusters, twoD)

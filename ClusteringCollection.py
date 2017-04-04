@@ -204,7 +204,7 @@ def Heatmap(X):
     sns.plt.show()
 
 
-def Spectral_Cluster(X, pic_dir, clusters):
+def Spectral_Cluster(X, pic_dir, clusters, plot_in_2D):
     colors = np.array([x for x in 'bgrcmykbgrcmykbgrcmykbgrcmyk'])
     colors = np.hstack([colors] * 20)
     Cl_result = cluster.SpectralClustering(n_clusters=clusters,
@@ -222,22 +222,22 @@ def Spectral_Cluster(X, pic_dir, clusters):
     # if i_dataset == 0:
     #     plt.title(name, size=18)
 
-    # use pca
-    #lowDDataMat, reconMat = pca(X, 2)
-    #plt.scatter(X[:, 0], X[:, 1], color=colors[y_pred].tolist())
-    #plt.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], color=colors[y_pred].tolist())
-
-    #3 D
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    lowDDataMat, reconMat = pca(X, 3)
-    ax.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], lowDDataMat[:, 2].ravel().tolist()[0], color=colors[y_pred].tolist(), marker = 'o')
+    if plot_in_2D:
+        # use pca
+        lowDDataMat, reconMat = pca(X, 2)
+        #plt.scatter(X[:, 0], X[:, 1], color=colors[y_pred].tolist())
+        plt.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], color=colors[y_pred].tolist())
+    else :
+        #3 D
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        lowDDataMat, reconMat = pca(X, 3)
+        ax.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], lowDDataMat[:, 2].ravel().tolist()[0], color=colors[y_pred].tolist(), marker = 'o')
 
     if hasattr(Cl_result, 'cluster_centers_'):
         centers = Cl_result.cluster_centers_
         center_colors = colors[:len(centers)]
-
-        #plt.scatter(centers[:, 2], centers[:, 4], s=100, c=center_colors)
+        plt.scatter(centers[:, 2], centers[:, 4], s=100, c=center_colors)
         # print centers[:, 0], centers[:, 1]
     # plt.xlim(-0.5, 0.5)
     # plt.ylim(-0.5, 0.5)
