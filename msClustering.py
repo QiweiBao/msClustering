@@ -90,15 +90,15 @@ def clu_DBSCAN(X, pic_dir):
 
 
 if __name__ == "__main__":
-    path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
-    # path = "/home/majunqi/research/result/test_automation/processed_data_largesize/"
+    # path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
+    path = "/home/majunqi/research/result/test_automation/processed_data_largesize/"
     # createMethodList(path)
     # choose clustering method
     # clu_method = "Hierarchical"
     # clu_method = "DBSCAN"
     # clu_method = "Kmeans"
     clu_method = "Spectral"
-    clusters = 3
+    clusters = 2
     #plot either in 2D or 3D
     twoD = False
     dataExtract(path, clu_method, clusters, twoD)

@@ -232,6 +232,7 @@ def Spectral_Cluster(X, pic_dir, clusters, plot_in_2D):
             center_colors = colors[:len(centers)]
             print centers
             plt.scatter(centers[:, 2], centers[:, 4], s = 100, c = center_colors)
+        savefig(pic_dir)
     else :
         #3 D
         fig = plt.figure()
@@ -243,6 +244,7 @@ def Spectral_Cluster(X, pic_dir, clusters, plot_in_2D):
             center_colors = colors[:len(centers)]
             print centers
             ax.scatter(centers[:, 2], centers[:, 3], centers[:, 4], color = center_colors)
+        savefig(pic_dir)
         # print centers[:, 0], centers[:, 1]
     # plt.xlim(-0.5, 0.5)
     # plt.ylim(-0.5, 0.5)
@@ -254,7 +256,7 @@ def Spectral_Cluster(X, pic_dir, clusters, plot_in_2D):
     # plot_num += 1
 
     plt.show()
-    # savefig(pic_dir)
+
 
 
 def DBSCAN(X, pic_dir):
