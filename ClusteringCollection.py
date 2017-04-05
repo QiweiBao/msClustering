@@ -259,7 +259,7 @@ def Spectral_Cluster(X, pic_dir, clusters, plot_in_2D):
 
 
 
-def DBSCAN(X, pic_dir):
+def DBSCAN(X, pic_dir, plot_in_2D):
     db = cluster.DBSCAN(eps=0.3, min_samples=10).fit(X)
     core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
     core_samples_mask[db.core_sample_indices_] = True
@@ -278,16 +278,27 @@ def DBSCAN(X, pic_dir):
 
         class_member_mask = (labels == k)
 
-        xy = X[class_member_mask & core_samples_mask]
-        plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
-                 markeredgecolor='k', markersize=14)
+        if plot_in_2D is True:
+            lowDDataMat, reconMat = pca(X, 2)
+            xy = lowDDataMat[class_member_mask & core_samples_mask]
+            plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
+                     markeredgecolor='k', markersize=14)
 
-        xy = X[class_member_mask & ~core_samples_mask]
-        plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
-                 markeredgecolor='k', markersize=6)
+            xy = lowDDataMat[class_member_mask & ~core_samples_mask]
+            plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
+                     markeredgecolor='k', markersize=6)
+        else:
+            fig = plt.figure()
+            ax = fig.add_subplot(111, projection='3d')
+            lowDDataMat, reconMat = pca(X, 3)
+            xy = lowDDataMat[class_member_mask & core_samples_mask]
+            ax.scatter(xy[:, 0].ravel().tolist()[0], xy[:, 1].ravel().tolist()[0], xy[:, 2].ravel().tolist()[0], color=col, marker = 'o')
+
+            xy = lowDDataMat[class_member_mask & ~core_samples_mask]
+            ax.scatter(xy[:, 0].ravel().tolist()[0], xy[:, 1].ravel().tolist()[0], xy[:, 2].ravel().tolist()[0], color=col, marker = 'o')
 
     plt.title('Estimated number of clusters: %d' % n_clusters_)
-    # plt.show()
+    plt.show()
 
     savefig(pic_dir)
     # print('Estimated number of clusters: %d' % n_clusters_)
