@@ -226,18 +226,23 @@ def Spectral_Cluster(X, pic_dir, clusters, plot_in_2D):
         # use pca
         lowDDataMat, reconMat = pca(X, 2)
         #plt.scatter(X[:, 0], X[:, 1], color=colors[y_pred].tolist())
-        plt.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], color=colors[y_pred].tolist())
+        plt.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], color = colors[y_pred].tolist())
+        if hasattr(Cl_result, 'cluster_centers_'):
+            centers = Cl_result.cluster_centers_
+            center_colors = colors[:len(centers)]
+            print centers
+            plt.scatter(centers[:, 2], centers[:, 4], s = 100, c = center_colors)
     else :
         #3 D
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
         lowDDataMat, reconMat = pca(X, 3)
-        ax.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], lowDDataMat[:, 2].ravel().tolist()[0], color=colors[y_pred].tolist(), marker = 'o')
-
-    if hasattr(Cl_result, 'cluster_centers_'):
-        centers = Cl_result.cluster_centers_
-        center_colors = colors[:len(centers)]
-        plt.scatter(centers[:, 2], centers[:, 4], s=100, c=center_colors)
+        ax.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0], lowDDataMat[:, 2].ravel().tolist()[0], color = colors[y_pred].tolist(), marker = 'o')
+        if hasattr(Cl_result, 'cluster_centers_'):
+            centers = Cl_result.cluster_centers_
+            center_colors = colors[:len(centers)]
+            print centers
+            ax.scatter(centers[:, 2], centers[:, 3], centers[:, 4], color = center_colors)
         # print centers[:, 0], centers[:, 1]
     # plt.xlim(-0.5, 0.5)
     # plt.ylim(-0.5, 0.5)
@@ -248,8 +253,8 @@ def Spectral_Cluster(X, pic_dir, clusters, plot_in_2D):
     #          horizontalalignment='right')
     # plot_num += 1
 
-    # plt.show()
-    savefig(pic_dir)
+    plt.show()
+    # savefig(pic_dir)
 
 
 def DBSCAN(X, pic_dir):
@@ -300,7 +305,7 @@ if __name__ == "__main__":
     X = fileread(dirname)
     X = normalization(X)
     outputdir = "/Users/qiweibao/Code/Python/Output.png"
-    Spectral_Cluster(X, outputdir, 1)
+    Spectral_Cluster(X, outputdir, 3, False)
 '''
     #use pca
     lowDDataMat,reconMat = pca(X,2)
