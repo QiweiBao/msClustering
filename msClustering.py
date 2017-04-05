@@ -52,7 +52,7 @@ def dataExtract(path, clu_method, clusters, plot_in_2D=True):
         elif clu_method is "Kmeans":
             clu_Kmeans(X, pic_dir)
         elif clu_method is "DBSCAN":
-            clu_DBSCAN(X, pic_dir)
+            clu_DBSCAN(X, pic_dir, plot_in_2D)
         elif clu_method is "Spectral":
             clu_spectral(X, pic_dir, clusters, plot_in_2D)
 
@@ -84,8 +84,8 @@ def clu_Kmeans(X, pic_dir):
     ClusteringCollection.createKmeans(X, pic_dir)
 
 
-def clu_DBSCAN(X, pic_dir):
-    Cl_result = ClusteringCollection.DBSCAN(X, pic_dir)
+def clu_DBSCAN(X, pic_dir, plot_in_2D):
+    Cl_result = ClusteringCollection.DBSCAN(X, pic_dir, plot_in_2D)
     # ClusteringCollection.drawDBSCAN(Cl_result, pic_dir)
 
 
@@ -95,9 +95,9 @@ if __name__ == "__main__":
     # createMethodList(path)
     # choose clustering method
     # clu_method = "Hierarchical"
-    # clu_method = "DBSCAN"
+    clu_method = "DBSCAN"
     # clu_method = "Kmeans"
-    clu_method = "Spectral"
+    # clu_method = "Spectral"
     clusters = 2
     #plot either in 2D or 3D
     twoD = False
