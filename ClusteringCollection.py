@@ -232,7 +232,6 @@ def Spectral_Cluster(X, pic_dir, clusters, plot_in_2D):
             center_colors = colors[:len(centers)]
             print centers
             plt.scatter(centers[:, 2], centers[:, 4], s = 100, c = center_colors)
-        savefig(pic_dir)
     else :
         #3 D
         fig = plt.figure()
@@ -244,7 +243,6 @@ def Spectral_Cluster(X, pic_dir, clusters, plot_in_2D):
             center_colors = colors[:len(centers)]
             print centers
             ax.scatter(centers[:, 2], centers[:, 3], centers[:, 4], color = center_colors)
-        savefig(pic_dir)
         # print centers[:, 0], centers[:, 1]
     # plt.xlim(-0.5, 0.5)
     # plt.ylim(-0.5, 0.5)
@@ -254,10 +252,8 @@ def Spectral_Cluster(X, pic_dir, clusters, plot_in_2D):
     #          transform=plt.gca().transAxes, size=15,
     #          horizontalalignment='right')
     # plot_num += 1
-
+    savefig(pic_dir)
     plt.show()
-
-
 
 def DBSCAN(X, pic_dir, plot_in_2D):
     db = cluster.DBSCAN(eps=0.3, min_samples=10).fit(X)
@@ -271,6 +267,10 @@ def DBSCAN(X, pic_dir, plot_in_2D):
     # Black removed and is used for noise instead.
     unique_labels = set(labels)
     colors = plt.cm.Spectral(np.linspace(0, 1, len(unique_labels)))
+    times = 1
+    if plot_in_2D is False:
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
     for k, col in zip(unique_labels, colors):
         if k == -1:
             # Black used for noise.
@@ -282,25 +282,26 @@ def DBSCAN(X, pic_dir, plot_in_2D):
             lowDDataMat, reconMat = pca(X, 2)
             xy = lowDDataMat[class_member_mask & core_samples_mask]
             plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
-                     markeredgecolor='k', markersize=14)
+                     markeredgecolor='k', markersize=14, label = times)
 
             xy = lowDDataMat[class_member_mask & ~core_samples_mask]
             plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=col,
-                     markeredgecolor='k', markersize=6)
+                     markeredgecolor='k', markersize=6,)
+            times += 1
         else:
-            fig = plt.figure()
-            ax = fig.add_subplot(111, projection='3d')
             lowDDataMat, reconMat = pca(X, 3)
             xy = lowDDataMat[class_member_mask & core_samples_mask]
-            ax.scatter(xy[:, 0].ravel().tolist()[0], xy[:, 1].ravel().tolist()[0], xy[:, 2].ravel().tolist()[0], color=col, marker = 'o')
+            ax.scatter(xy[:, 0].ravel().tolist()[0], xy[:, 1].ravel().tolist()[0], xy[:, 2].ravel().tolist()[0], color=col, marker = 'o', label = times)
 
             xy = lowDDataMat[class_member_mask & ~core_samples_mask]
             ax.scatter(xy[:, 0].ravel().tolist()[0], xy[:, 1].ravel().tolist()[0], xy[:, 2].ravel().tolist()[0], color=col, marker = 'o')
 
+            times += 1
+        plt.legend(loc='upper left')
     plt.title('Estimated number of clusters: %d' % n_clusters_)
     plt.show()
 
-    savefig(pic_dir)
+    # savefig(pic_dir)
     # print('Estimated number of clusters: %d' % n_clusters_)
     # print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels_true, labels))
     # print("Completeness: %0.3f" % metrics.completeness_score(labels_true, labels))
@@ -312,14 +313,13 @@ def DBSCAN(X, pic_dir, plot_in_2D):
     # print("Silhouette Coefficient: %0.3f"
     #       % metrics.silhouette_score(X, labels))
 
-
 if __name__ == "__main__":
-    dirname = "/Users/qiweibao/Code/Python/Inputdata/data.txt"
+    '''dirname = "/Users/qiweibao/Code/Python/Inputdata/data.txt"
     X = fileread(dirname)
     X = normalization(X)
     outputdir = "/Users/qiweibao/Code/Python/Output.png"
     Spectral_Cluster(X, outputdir, 3, False)
-'''
+
     #use pca
     lowDDataMat,reconMat = pca(X,2)
     drawScatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0])
