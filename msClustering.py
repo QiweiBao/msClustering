@@ -55,6 +55,10 @@ def dataExtract(path, clu_method, clusters, plot_in_2D=True):
             clu_DBSCAN(X, pic_dir,  plot_in_2D)
         elif clu_method is "Spectral":
             clu_spectral(X, pic_dir, clusters, plot_in_2D)
+        else:
+            print "error"
+            return
+
 
 
 def output_X(X, pic_dir, file_name):
@@ -76,7 +80,9 @@ def clu_Hierarchical(X, pic_dir):
 
 
 def clu_spectral(X, pic_dir, clusters, plot_in_2D):
-    ClusteringCollection.Spectral_Cluster(X, pic_dir, clusters, plot_in_2D)
+    #TODO 
+    y_pred = ClusteringCollection.Spectral_Cluster(X, pic_dir, clusters, plot_in_2D)
+    X_flat = [] #matrix
 
 
 def clu_Kmeans(X, pic_dir):
@@ -90,15 +96,15 @@ def clu_DBSCAN(X, pic_dir, plot_in_2D):
 
 
 if __name__ == "__main__":
-    path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
-    # path = "/home/majunqi/research/result/test_automation/processed_data_largesize/"
+    # path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
+    path = "/home/majunqi/research/result/test_automation/processed_data_largesize/"
     # createMethodList(path)
     # choose clustering method
     # clu_method = "Hierarchical"
     # clu_method = "DBSCAN"
     # clu_method = "Kmeans"
-    clu_method = "DBSCAN"
+    clu_method = "Spectral"
     clusters = 2
     #plot either in 2D or 3D
-    twoD = True
+    twoD = False
     dataExtract(path, clu_method, clusters, twoD)
