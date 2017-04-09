@@ -42,28 +42,6 @@ def fileread(dirname):
     X = np.array(X)
     return X
 
-
-def normalization(X):
-    maxdata = 0.0
-    mindata = 0.0
-    res, tmp = [], []
-    for line in X:
-        for data in line:
-            if data > maxdata:
-                maxdata = data
-            if data < mindata:
-                mindata = data
-    delta = maxdata - mindata
-    for line in X:
-        for data in line:
-            data = (data - mindata) / delta
-            tmp.append(data)
-        res.append(tmp)
-        tmp = []
-    res = np.array(res)
-    return res
-
-
 # Draw scatter with first 2 columns
 def drawScatter(a, b):
     plt.figure(figsize=(25, 10))
@@ -254,6 +232,7 @@ def Spectral_Cluster(X, pic_dir, clusters, plot_in_2D):
     # plot_num += 1
     savefig(pic_dir)
     plt.show()
+    return
 
 def DBSCAN(X, pic_dir, plot_in_2D):
     db = cluster.DBSCAN(eps=0.3, min_samples=10).fit(X)

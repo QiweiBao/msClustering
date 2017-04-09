@@ -69,6 +69,26 @@ def method_read(dirname):
                     res.append(data)
     return res
 
+# Normalize data. Output should be within 0~1.
+def normalization(X):
+    maxdata = 0.0
+    mindata = 0.0
+    res, tmp = [], []
+    for line in X:
+        for data in line:
+            if data > maxdata:
+                maxdata = data
+            if data < mindata:
+                mindata = data
+    delta = maxdata - mindata
+    for line in X:
+        for data in line:
+            data = (data - mindata) / delta
+            tmp.append(data)
+        res.append(tmp)
+        tmp = []
+    res = np.array(res)
+    return res
 
 # If one method exist in the list of method names but not in one version, data of this method in this HTML file should be all zero.
 def insertzero(X, method_list, orderindex):
