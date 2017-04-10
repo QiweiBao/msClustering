@@ -19,7 +19,7 @@ def createMethodList(path):
     print "Method list created."
 
 
-def dataExtract(workspace, path, path_flat, path_pprof, clu_method, clusters, plot_in_2D=True):
+def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters, plot_in_2D=True):
     global y_pred
     path = workspace + path
     path_flat = workspace + path_flat
@@ -79,17 +79,17 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, clusters, pl
         elif clu_method is "DBSCAN":
             clu_DBSCAN(X, pic_dir, plot_in_2D)
         elif clu_method is "Spectral":
-            y_pred = clu_spectral(X, pic_dir, clusters, plot_in_2D)
+            y_pred = clu_spectral(X, pic_dir, num_clusters, plot_in_2D)
             clusters = cluster_mapping(y_pred, X_flat)
             total_times = cluster_mapping(y_pred, Y)
-            num_clusters = 1
+            clusters_num = 1
             for cluster_X, total_time_Y in zip(clusters, total_times):
                 linear_regression(cluster_X, total_time_Y)
-                output_matrix(cluster_X, pic_dir, "cluster_X"+str(num_clusters))
+                output_matrix(cluster_X, pic_dir, "cluster_X"+str(clusters_num))
                 #output_matrix(total_time_Y, pic_dir, "total_time_Y"+str(num_clusters))
-                outputdir = pic_dir + "Y" + "total_time_Y"+str(num_clusters) + ".txt"
+                outputdir = pic_dir + "Y" + "total_time_Y"+str(clusters_num) + ".txt"
                 MethodListExtraction.writeMethodList(total_time_Y, outputdir)
-                num_clusters += 1
+                clusters_num += 1
         else:
             print "error"
             return
@@ -198,8 +198,8 @@ def clu_DBSCAN(X, pic_dir, plot_in_2D):
 
 if __name__ == "__main__":
     # path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
-    # workspace = "/home/majunqi/research/result/test_automation_test/"
-    workspace = "/Users/qiweibao/Code/Python/InputData/test_automation_test/"
+    workspace = "/home/majunqi/research/result/test_automation_test/"
+    # workspace = "/Users/qiweibao/Code/Python/InputData/test_automation_test/"
     path = "processed_data_largesize/"
     path_flat = "processed_data_largesize_flat/"
     path_pprof = "profdata_pfm_largesize_classified/"
