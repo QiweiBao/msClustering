@@ -2,6 +2,7 @@ import ClusteringCollection
 import data_extract
 import MethodListExtraction
 import os
+import linearRegression
 import sklearn
 from sklearn.preprocessing import StandardScaler
 
@@ -17,8 +18,10 @@ def createMethodList(path):
     print "Method list created."
 
 
-def dataExtract(path, path_flat, clu_method, clusters, plot_in_2D=True):
+def dataExtract(workspace, path, path_flat, path_pprof, clu_method, clusters, plot_in_2D=True):
     global y_pred
+    path = workspace + path
+    path_flat = workspace + path_flat
     paths = data_extract.readfilelist(path)
     path_flats = data_extract.readfilelist(path_flat)
     for Tobe_Cluster_dir, Flat_dir in zip(paths, path_flats):
@@ -50,6 +53,15 @@ def dataExtract(path, path_flat, clu_method, clusters, plot_in_2D=True):
         X_flat = data_extract.deleteword(X_flat)
         X_flat = data_extract.reverse(X_flat, orderindex)
 
+        '''
+            TODO
+            get version_name here
+            '''
+        pieces = Tobe_Cluster_dir.split('/')
+        version_name = pieces[len(pieces)-1]
+        version_name = version_name[:len(version_name)-4]
+        Y = extract_totaltime_each(workspace+path_pprof+version_name+'/')
+
         # output dir for clustering result pictures
         dir_pieces = Tobe_Cluster_dir.split('/')
         png_name = dir_pieces[len(dir_pieces) - 1]
@@ -70,10 +82,37 @@ def dataExtract(path, path_flat, clu_method, clusters, plot_in_2D=True):
             clu_DBSCAN(X, pic_dir, plot_in_2D)
         elif clu_method is "Spectral":
             y_pred = clu_spectral(X, pic_dir, clusters, plot_in_2D)
-            extract_everycluster_data(y_pred, X_flat)
+            clusters = extract_everycluster_data(y_pred, X_flat)
+
+            for cluster_X in clusters:
+                linear_regression(cluster_X, Y)
         else:
             print "error"
             return
+
+
+def extract_totaltime_each(path):
+    files_dir = os.listdir(path)
+    sorted(files_dir)
+    Y = list()
+    for file_dir in files_dir:
+        file = open(path+file_dir, "r")
+        line_one = file.readline()
+        line_one = line_one.split()
+        total_time = line_one[0]
+        if total_time.__contains__('ms'):
+            total_time = total_time[: len(total_time) - 2]
+            total_time = long(total_time) / 1000
+            total_time = str(total_time)
+        else:
+            total_time = total_time[: len(total_time) - 1]
+        Y.append(total_time)
+
+    return Y
+
+
+def linear_regression(X, Y):
+    linearRegression.simpleEquation(X, Y)
 
 
 def extract_everycluster_data(index_list, X_flat):
@@ -112,6 +151,7 @@ def clu_spectral(X, pic_dir, clusters, plot_in_2D):
     y_pred = ClusteringCollection.Spectral_Cluster(X, pic_dir, clusters, plot_in_2D)
     return y_pred
 
+
 def clu_Kmeans(X, pic_dir):
     # kmeans clustering
     ClusteringCollection.createKmeans(X, pic_dir)
@@ -124,9 +164,10 @@ def clu_DBSCAN(X, pic_dir, plot_in_2D):
 
 if __name__ == "__main__":
     # path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
-
-    path = "/home/majunqi/research/result/test_automation_test/processed_data_largesize/"
-    path_flat = "/home/majunqi/research/result/test_automation_test/processed_data_largesize_flat/"
+    workspace = "/home/majunqi/research/result/test_automation_test/"
+    path = "processed_data_largesize/"
+    path_flat = "processed_data_largesize_flat/"
+    path_pprof = "profdata_pfm_largesize_classified/"
 
     # if method list already exists, comment out this line
     # createMethodList(path)
@@ -139,4 +180,4 @@ if __name__ == "__main__":
     clusters = 2
     # plot either in 2D or 3D
     twoD = False
-    dataExtract(path, path_flat, clu_method, clusters, twoD)
+    dataExtract(workspace, path, path_flat, path_pprof, clu_method, clusters, twoD)
