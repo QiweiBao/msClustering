@@ -70,13 +70,13 @@ def dataExtract(path, path_flat, clu_method, clusters, plot_in_2D=True):
             clu_DBSCAN(X, pic_dir, plot_in_2D)
         elif clu_method is "Spectral":
             y_pred = clu_spectral(X, pic_dir, clusters, plot_in_2D)
-            get_cluster_data(y_pred, X_flat)
+            extract_everycluster_data(y_pred, X_flat)
         else:
             print "error"
             return
 
 
-def get_cluster_data(index_list, X_flat):
+def extract_everycluster_data(index_list, X_flat):
     clu_one = list()
     clu_two = list()
     for index in index_list:
