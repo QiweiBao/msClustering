@@ -47,9 +47,6 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, clusters, pl
 
         # read flat time. Do not need normalization.
         X_flat = data_extract.fileread(Flat_dir)
-        method_name_path = path + "MethodNameList.txt"
-        method_list = data_extract.method_read(method_name_path)
-        orderindex = data_extract.readmethodnames()
         X_flat = data_extract.insertzero(X_flat, method_list, orderindex)
         X_flat = data_extract.deleteword(X_flat)
         X_flat = data_extract.reverse(X_flat, orderindex)
@@ -88,8 +85,10 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, clusters, pl
             num_clusters = 1
             for cluster_X, total_time_Y in zip(clusters, total_times):
                 linear_regression(cluster_X, total_time_Y)
-                output_matrix(cluster_X, pic_dir, "cluster_X" + str(num_clusters))
-                output_matrix(total_time_Y, pic_dir, "total_time_Y" + str(num_clusters))
+                output_matrix(cluster_X, pic_dir, "cluster_X"+str(num_clusters))
+                #output_matrix(total_time_Y, pic_dir, "total_time_Y"+str(num_clusters))
+                outputdir = pic_dir + "Y" + "total_time_Y"+str(num_clusters) + ".txt"
+                MethodListExtraction.writeMethodList(total_time_Y, outputdir)
                 num_clusters += 1
         else:
             print "error"
@@ -172,7 +171,6 @@ def clearMethodList(pathwrite):
     if os.path.isfile(pathwrite):
         os.remove(pathwrite)
 
-
 def clu_Hierarchical(X, pic_dir):
     # hierarchical clustering
     Cl_result = ClusteringCollection.HierarchicalCluster(X)
@@ -200,7 +198,8 @@ def clu_DBSCAN(X, pic_dir, plot_in_2D):
 
 if __name__ == "__main__":
     # path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
-    workspace = "/home/majunqi/research/result/test_automation_test/"
+    # workspace = "/home/majunqi/research/result/test_automation_test/"
+    workspace = "/Users/qiweibao/Code/Python/InputData/test_automation_test/"
     path = "processed_data_largesize/"
     path_flat = "processed_data_largesize_flat/"
     path_pprof = "profdata_pfm_largesize_classified/"
