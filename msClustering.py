@@ -136,14 +136,31 @@ def cluster_mapping(index_list, X):
 
 def output_matrix(X, pic_dir, file_name):
     path = pic_dir + "X" + file_name + ".txt"
+    '''
     f = open(path, "w")
     for row in X:
         # f.writelines("%s " % item for item in row)
         f.write(row)
         f.write('\n')
     f.close()
+    '''
+    clearMethodList(path)
+    output = open(path, 'wb+')
+    writeline = ""
+    for line in X:
+        for i in line:
+            writeline += str(i)
+            writeline += "  "   
+        output.write(writeline)
+        output.write("\n")
+        writeline = ""
+    output.close()
 
-
+# clear method name list before write
+def clearMethodList(pathwrite):
+    if os.path.isfile(pathwrite):
+        os.remove(pathwrite)
+        
 def clu_Hierarchical(X, pic_dir):
     # hierarchical clustering
     Cl_result = ClusteringCollection.HierarchicalCluster(X)
