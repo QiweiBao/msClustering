@@ -7,6 +7,7 @@ from sklearn.preprocessing import StandardScaler
 
 y_pred = []
 
+
 def createMethodList(path):
     # path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
     pathwrite = path + "MethodNameList.txt"
@@ -21,7 +22,7 @@ def dataExtract(path, path_flat, clu_method, clusters, plot_in_2D=True):
     paths = data_extract.readfilelist(path)
     path_flats = data_extract.readfilelist(path_flat)
     for Tobe_Cluster_dir, Flat_dir in zip(paths, path_flats):
-        #read flat time proportion
+        # read flat time proportion
         X = data_extract.fileread(Tobe_Cluster_dir)
         method_name_path = path + "MethodNameList.txt"
         method_list = data_extract.method_read(method_name_path)
@@ -49,7 +50,7 @@ def dataExtract(path, path_flat, clu_method, clusters, plot_in_2D=True):
         X_flat = data_extract.deleteword(X_flat)
         X_flat = data_extract.reverse(X_flat, orderindex)
 
-        #output dir for clustering result pictures
+        # output dir for clustering result pictures
         dir_pieces = Tobe_Cluster_dir.split('/')
         png_name = dir_pieces[len(dir_pieces) - 1]
         png_name = png_name[:len(png_name) - 4] + ".png"
@@ -66,7 +67,7 @@ def dataExtract(path, path_flat, clu_method, clusters, plot_in_2D=True):
         elif clu_method is "Kmeans":
             clu_Kmeans(X, pic_dir)
         elif clu_method is "DBSCAN":
-            clu_DBSCAN(X, pic_dir,  plot_in_2D)
+            clu_DBSCAN(X, pic_dir, plot_in_2D)
         elif clu_method is "Spectral":
             y_pred = clu_spectral(X, pic_dir, clusters, plot_in_2D)
             get_cluster_data(y_pred, X_flat)
@@ -74,8 +75,18 @@ def dataExtract(path, path_flat, clu_method, clusters, plot_in_2D=True):
             print "error"
             return
 
-def get_cluster_data(index, X_flat):
-    return
+
+def get_cluster_data(index_list, X_flat):
+    clu_one = list()
+    clu_two = list()
+    for index in index_list:
+        if index == 0:
+            clu_one.append(X_flat[index])
+        elif index == 1:
+            clu_two.append(X_flat[index])
+
+    clusters = list(clu_one, clu_two)
+    return clusters
 
 
 def output_X(X, pic_dir, file_name):
@@ -97,7 +108,7 @@ def clu_Hierarchical(X, pic_dir):
 
 
 def clu_spectral(X, pic_dir, clusters, plot_in_2D):
-    #TODO 
+    # TODO
     y_pred = ClusteringCollection.Spectral_Cluster(X, pic_dir, clusters, plot_in_2D)
     return y_pred
 
@@ -126,6 +137,6 @@ if __name__ == "__main__":
     # clu_method = "Kmeans"
     clu_method = "Spectral"
     clusters = 2
-    #plot either in 2D or 3D
+    # plot either in 2D or 3D
     twoD = False
     dataExtract(path, path_flat, clu_method, clusters, twoD)

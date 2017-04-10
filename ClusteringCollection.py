@@ -231,7 +231,7 @@ def Spectral_Cluster(X, pic_dir, clusters, plot_in_2D):
     #          horizontalalignment='right')
     # plot_num += 1
     savefig(pic_dir)
-    plt.show()
+    # plt.show()
     return y_pred
 
 def DBSCAN(X, pic_dir, plot_in_2D):
