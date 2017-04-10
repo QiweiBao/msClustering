@@ -295,9 +295,9 @@ def DBSCAN(X, pic_dir, plot_in_2D):
 if __name__ == "__main__":
     '''dirname = "/Users/qiweibao/Code/Python/Inputdata/data.txt"
     X = fileread(dirname)
-    X = normalization(X)
+    #X = normalization(X)
     outputdir = "/Users/qiweibao/Code/Python/Output.png"
-    Spectral_Cluster(X, outputdir, 3, False)
+    Spectral_Cluster(X, outputdir, 3, True)
 
     #use pca
     lowDDataMat,reconMat = pca(X,2)
