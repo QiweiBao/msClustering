@@ -82,10 +82,10 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, clusters, pl
             clu_DBSCAN(X, pic_dir, plot_in_2D)
         elif clu_method is "Spectral":
             y_pred = clu_spectral(X, pic_dir, clusters, plot_in_2D)
-            clusters = extract_everycluster_data(y_pred, X_flat)
-
-            for cluster_X in clusters:
-                linear_regression(cluster_X, Y)
+            clusters = cluster_mapping(y_pred, X_flat)
+            total_times = cluster_mapping(y_pred, Y)
+            for cluster_X, total_time_Y in zip(clusters, total_times):
+                linear_regression(cluster_X, total_time_Y)
         else:
             print "error"
             return
@@ -114,15 +114,15 @@ def extract_totaltime_each(path):
 def linear_regression(X, Y):
     linearRegression.simpleEquation(X, Y)
 
-
-def extract_everycluster_data(index_list, X_flat):
+# map original data into small clusters based on index
+def cluster_mapping(index_list, X):
     clu_one = list()
     clu_two = list()
     for index in index_list:
         if index == 0:
-            clu_one.append(X_flat[index])
+            clu_one.append(X[index])
         elif index == 1:
-            clu_two.append(X_flat[index])
+            clu_two.append(X[index])
 
     clusters = list()
     clusters.append(clu_one)
