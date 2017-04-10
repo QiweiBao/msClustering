@@ -70,7 +70,7 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, clusters, pl
         if not os.path.exists(pic_dir):
             os.mkdir(pic_dir)
 
-        output_X(X, pic_dir, png_name[:len(png_name) - 10])
+        output_matrix(X, pic_dir, png_name[:len(png_name) - 10])
 
         pic_dir += png_name
 
@@ -84,8 +84,12 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, clusters, pl
             y_pred = clu_spectral(X, pic_dir, clusters, plot_in_2D)
             clusters = cluster_mapping(y_pred, X_flat)
             total_times = cluster_mapping(y_pred, Y)
+            num_clusters = 1
             for cluster_X, total_time_Y in zip(clusters, total_times):
                 linear_regression(cluster_X, total_time_Y)
+                output_matrix(cluster_X, pic_dir, "cluster_X"+str(num_clusters))
+                output_matrix(total_time_Y, pic_dir, "total_time_Y"+str(num_clusters))
+                num_clusters += 1
         else:
             print "error"
             return
@@ -93,7 +97,7 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, clusters, pl
 
 def extract_totaltime_each(path):
     files_dir = os.listdir(path)
-    sorted(files_dir)
+    files_dir = sorted(files_dir)
     Y = list()
     for file_dir in files_dir:
         file = open(path+file_dir, "r")
@@ -118,10 +122,10 @@ def linear_regression(X, Y):
 def cluster_mapping(index_list, X):
     clu_one = list()
     clu_two = list()
-    for index in index_list:
-        if index == 0:
+    for index in range(0, len(index_list)):
+        if index_list[index] == 0:
             clu_one.append(X[index])
-        elif index == 1:
+        elif index_list[index] == 1:
             clu_two.append(X[index])
 
     clusters = list()
@@ -130,11 +134,12 @@ def cluster_mapping(index_list, X):
     return clusters
 
 
-def output_X(X, pic_dir, file_name):
+def output_matrix(X, pic_dir, file_name):
     path = pic_dir + "X" + file_name + ".txt"
     f = open(path, "w")
     for row in X:
-        f.writelines("%s " % item for item in row)
+        # f.writelines("%s " % item for item in row)
+        f.write(row)
         f.write('\n')
     f.close()
 
