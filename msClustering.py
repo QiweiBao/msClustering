@@ -3,6 +3,7 @@ import data_extract
 import MethodListExtraction
 import os
 import linearRegression
+import re
 import sklearn
 from sklearn.preprocessing import StandardScaler
 
@@ -58,9 +59,9 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, clusters, pl
             get version_name here
             '''
         pieces = Tobe_Cluster_dir.split('/')
-        version_name = pieces[len(pieces)-1]
-        version_name = version_name[:len(version_name)-4]
-        Y = extract_totaltime_each(workspace+path_pprof+version_name+'/')
+        version_name = pieces[len(pieces) - 1]
+        version_name = version_name[:len(version_name) - 4]
+        Y = extract_totaltime_each(workspace + path_pprof + version_name + '/')
 
         # output dir for clustering result pictures
         dir_pieces = Tobe_Cluster_dir.split('/')
@@ -87,8 +88,8 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, clusters, pl
             num_clusters = 1
             for cluster_X, total_time_Y in zip(clusters, total_times):
                 linear_regression(cluster_X, total_time_Y)
-                output_matrix(cluster_X, pic_dir, "cluster_X"+str(num_clusters))
-                output_matrix(total_time_Y, pic_dir, "total_time_Y"+str(num_clusters))
+                output_matrix(cluster_X, pic_dir, "cluster_X" + str(num_clusters))
+                output_matrix(total_time_Y, pic_dir, "total_time_Y" + str(num_clusters))
                 num_clusters += 1
         else:
             print "error"
@@ -97,10 +98,12 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, clusters, pl
 
 def extract_totaltime_each(path):
     files_dir = os.listdir(path)
-    files_dir = sorted(files_dir)
+    # files_dir = sorted(files_dir)
+    # files_dir.sort()
+    files_dir = natural_sort(files_dir)
     Y = list()
     for file_dir in files_dir:
-        file = open(path+file_dir, "r")
+        file = open(path + file_dir, "r")
         line_one = file.readline()
         line_one = line_one.split()
         total_time = line_one[0]
@@ -115,8 +118,15 @@ def extract_totaltime_each(path):
     return Y
 
 
+def natural_sort(l):
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
+    return sorted(l, key=alphanum_key)
+
+
 def linear_regression(X, Y):
     linearRegression.simpleEquation(X, Y)
+
 
 # map original data into small clusters based on index
 def cluster_mapping(index_list, X):
@@ -150,17 +160,19 @@ def output_matrix(X, pic_dir, file_name):
     for line in X:
         for i in line:
             writeline += str(i)
-            writeline += "  "   
+            writeline += "  "
         output.write(writeline)
         output.write("\n")
         writeline = ""
     output.close()
 
+
 # clear method name list before write
 def clearMethodList(pathwrite):
     if os.path.isfile(pathwrite):
         os.remove(pathwrite)
-        
+
+
 def clu_Hierarchical(X, pic_dir):
     # hierarchical clustering
     Cl_result = ClusteringCollection.HierarchicalCluster(X)
