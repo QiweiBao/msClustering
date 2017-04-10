@@ -16,10 +16,11 @@ def createMethodList(path):
     print "Method list created."
 
 
-def dataExtract(path, pathflat, clu_method, clusters, plot_in_2D=True):
+def dataExtract(path, path_flat, clu_method, clusters, plot_in_2D=True):
     global y_pred
     paths = data_extract.readfilelist(path)
-    for Tobe_Cluster_dir, Flat_dir in zip(paths, pathflat):
+    path_flats = data_extract.readfilelist(path_flat)
+    for Tobe_Cluster_dir, Flat_dir in zip(paths, path_flats):
         #read flat time proportion
         X = data_extract.fileread(Tobe_Cluster_dir)
         method_name_path = path + "MethodNameList.txt"
@@ -28,15 +29,6 @@ def dataExtract(path, pathflat, clu_method, clusters, plot_in_2D=True):
         X = data_extract.insertzero(X, method_list, orderindex)
         X = data_extract.deleteword(X)
         print "original number of methods: " + str(len(X))
-
-        #read flat time. Do not need normalization.
-        X_flat = data_extract.fileread(Flat_dir)
-        method_name_path = path + "MethodNameList.txt"
-        method_list = data_extract.method_read(method_name_path)
-        orderindex = data_extract.readmethodnames()
-        X_flat = data_extract.insertzero(X_flat, method_list, orderindex)
-        X_flat = data_extract.deleteword(X_flat)
-        X_flat = data_extract.reverse(X_flat, orderindex)
 
         # the second parameter is threshold
         # X = data_extract.removeSeldomUsingMethods(X, 0.5)
@@ -47,6 +39,15 @@ def dataExtract(path, pathflat, clu_method, clusters, plot_in_2D=True):
 
         # using scikit to normalize
         # X = StandardScaler().fit_transform(X)
+
+        # read flat time. Do not need normalization.
+        X_flat = data_extract.fileread(Flat_dir)
+        method_name_path = path + "MethodNameList.txt"
+        method_list = data_extract.method_read(method_name_path)
+        orderindex = data_extract.readmethodnames()
+        X_flat = data_extract.insertzero(X_flat, method_list, orderindex)
+        X_flat = data_extract.deleteword(X_flat)
+        X_flat = data_extract.reverse(X_flat, orderindex)
 
         #output dir for clustering result pictures
         dir_pieces = Tobe_Cluster_dir.split('/')
@@ -68,10 +69,13 @@ def dataExtract(path, pathflat, clu_method, clusters, plot_in_2D=True):
             clu_DBSCAN(X, pic_dir,  plot_in_2D)
         elif clu_method is "Spectral":
             y_pred = clu_spectral(X, pic_dir, clusters, plot_in_2D)
+            get_cluster_data(y_pred, X_flat)
         else:
             print "error"
             return
 
+def get_cluster_data(index, X_flat):
+    return
 
 
 def output_X(X, pic_dir, file_name):
@@ -95,8 +99,7 @@ def clu_Hierarchical(X, pic_dir):
 def clu_spectral(X, pic_dir, clusters, plot_in_2D):
     #TODO 
     y_pred = ClusteringCollection.Spectral_Cluster(X, pic_dir, clusters, plot_in_2D)
-    X_flat = [] #matrix
-
+    return y_pred
 
 def clu_Kmeans(X, pic_dir):
     # kmeans clustering
@@ -110,9 +113,13 @@ def clu_DBSCAN(X, pic_dir, plot_in_2D):
 
 if __name__ == "__main__":
     # path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
-    path = "/home/majunqi/research/result/test_automation/processed_data_largesize/"
-    pathflat = "" #dir include time of flat
+
+    path = "/home/majunqi/research/result/test_automation_test/processed_data_largesize/"
+    path_flat = "/home/majunqi/research/result/test_automation_test/processed_data_largesize_flat/"
+
+    # if method list already exists, comment out this line
     # createMethodList(path)
+
     # choose clustering method
     # clu_method = "Hierarchical"
     # clu_method = "DBSCAN"
@@ -121,4 +128,4 @@ if __name__ == "__main__":
     clusters = 2
     #plot either in 2D or 3D
     twoD = False
-    dataExtract(path, pathflat, clu_method, clusters, twoD)
+    dataExtract(path, path_flat, clu_method, clusters, twoD)
