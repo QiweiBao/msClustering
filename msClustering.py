@@ -124,7 +124,9 @@ def extract_everycluster_data(index_list, X_flat):
         elif index == 1:
             clu_two.append(X_flat[index])
 
-    clusters = list(clu_one, clu_two)
+    clusters = list()
+    clusters.append(clu_one)
+    clusters.append(clu_two)
     return clusters
 
 
