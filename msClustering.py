@@ -148,7 +148,7 @@ def cluster_mapping(index_list, X):
 
 
 def output_matrix(X, pic_dir, file_name):
-    path = pic_dir + "X" + file_name + ".txt"
+    path = pic_dir + file_name + ".txt"
     '''
     f = open(path, "w")
     for row in X:
