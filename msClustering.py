@@ -128,6 +128,10 @@ def linear_regression(X, Y):
 
 
 # map original data into small clusters based on index
+'''
+For now, the clusters number is 2.
+If the clusters number is not fixed, bug remains.
+'''
 def cluster_mapping(index_list, X):
     clu_one = list()
     clu_two = list()
