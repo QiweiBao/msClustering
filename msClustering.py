@@ -84,10 +84,10 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
             total_times = cluster_mapping(y_pred, Y)
             clusters_num = 1
             for cluster_X, total_time_Y in zip(clusters, total_times):
-                linear_regression(cluster_X, total_time_Y)
-                output_matrix(cluster_X, pic_dir, "cluster_X"+str(clusters_num))
+                # linear_regression(cluster_X, total_time_Y)
+                output_matrix(cluster_X, pic_dir[:len(pic_dir)-4], "_X"+str(clusters_num))
                 #output_matrix(total_time_Y, pic_dir, "total_time_Y"+str(num_clusters))
-                outputdir = pic_dir + "Y" + "total_time_Y"+str(clusters_num) + ".txt"
+                outputdir = pic_dir[:len(pic_dir)-4] + "_Y"+str(clusters_num) + ".txt"
                 MethodListExtraction.writeMethodList(total_time_Y, outputdir)
                 clusters_num += 1
         else:
