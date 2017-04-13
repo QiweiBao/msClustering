@@ -265,8 +265,11 @@ if __name__ == "__main__":
     for path in paths:
         f.write(path+'\n')
     f.close()
-        
+
 '''
+
+#reverse = True: sort file from large to small
+#reverse = False: sort file from small to large
 
 def sortfile_size(dirnames, reverse=False):
     """ Return list of file paths in directory sorted by file size """
