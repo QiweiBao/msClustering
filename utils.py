@@ -315,8 +315,12 @@ def reorderMetrix(X, orderInSizeDir):
             break
         else:
             htmlSizeOrder.append(int(read))
+    if len(X) is len(htmlSizeOrder):
+        continue
+    else:
+        print "number of order don't match metrix."
+        return
     htmlIndexBySize = sorted(range(len(htmlSizeOrder)), key=lambda k: htmlSizeOrder[k])
-    print htmlIndexBySize
     res = []
     for index in htmlIndexBySize:
         res.append(X[index])

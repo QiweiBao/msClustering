@@ -19,7 +19,7 @@ def createMethodList(path):
     print "Method list created."
 
 
-def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters, plot_in_2D=True):
+def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters, plot_in_2D=True, orderInSizeDir):
     global y_pred
     path = workspace + path
     path_flat = workspace + path_flat
@@ -41,6 +41,7 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         print "number of methods after removing infrequent methods:" + str(len(X))
         X = utils.reverse(X, orderindex)
         X = utils.normalization(X)
+        X = utils.reorderMetrix(X, orderInSizeDir)
 
         # using scikit to normalize
         # X = StandardScaler().fit_transform(X)
@@ -50,6 +51,8 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         X_flat = utils.insertzero(X_flat, method_list, orderindex)
         X_flat = utils.deleteword(X_flat)
         X_flat = utils.reverse(X_flat, orderindex)
+        X_flat = utils.reorderMetrix(X_flat, orderInSizeDir)
+
 
         '''
             TODO
@@ -59,6 +62,7 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         version_name = pieces[len(pieces) - 1]
         version_name = version_name[:len(version_name) - 4]
         Y = utils.extract_totaltime_each(workspace + path_pprof + version_name + '/')
+        Y = utils.reorderMetrix(Y, orderInSizeDir)
 
         # output dir for clustering result pictures
         dir_pieces = Tobe_Cluster_dir.split('/')
@@ -134,6 +138,7 @@ if __name__ == "__main__":
     path = "processed_data_largesize/"
     path_flat = "processed_data_largesize_flat/"
     path_pprof = "profdata_pfm_largesize_classified/"
+    orderInSizeDir = "/Users/qiweibao/Code/Python/InputData/order_in_size.txt"
 
     # if method list already exists, comment out this line
     # createMethodList(path)
@@ -146,4 +151,4 @@ if __name__ == "__main__":
     clusters = 2
     # plot either in 2D or 3D
     twoD = False
-    dataExtract(workspace, path, path_flat, path_pprof, clu_method, clusters, twoD)
+    dataExtract(workspace, path, path_flat, path_pprof, clu_method, clusters, twoD, orderInSizeDir)
