@@ -172,6 +172,83 @@ def removeSeldomUsingMethods(X, threshold):
     return new_X
 
 
+def extract_totaltime_each(path):
+    files_dir = os.listdir(path)
+    # files_dir = sorted(files_dir)
+    # files_dir.sort()
+    files_dir = natural_sort(files_dir)
+    Y = list()
+    for file_dir in files_dir:
+        file = open(path + file_dir, "r")
+        line_one = file.readline()
+        line_one = line_one.split()
+        total_time = line_one[0]
+        if total_time.__contains__('ms'):
+            total_time = total_time[: len(total_time) - 2]
+            total_time = long(total_time) / 1000
+            total_time = str(total_time)
+        else:
+            total_time = total_time[: len(total_time) - 1]
+        Y.append(total_time)
+
+    return Y
+
+
+def natural_sort(l):
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
+    return sorted(l, key=alphanum_key)
+
+
+# map original data into small clusters based on index
+'''
+For now, the clusters number is 2.
+If the clusters number is not fixed, bug remains.
+'''
+def cluster_mapping(index_list, X):
+    clu_one = list()
+    clu_two = list()
+    for index in range(0, len(index_list)):
+        if index_list[index] == 0:
+            clu_one.append(X[index])
+        elif index_list[index] == 1:
+            clu_two.append(X[index])
+
+    clusters = list()
+    clusters.append(clu_one)
+    clusters.append(clu_two)
+    return clusters
+
+
+def output_matrix(X, pic_dir, file_name):
+    path = pic_dir + file_name + ".txt"
+    '''
+    f = open(path, "w")
+    for row in X:
+        # f.writelines("%s " % item for item in row)
+        f.write(row)
+        f.write('\n')
+    f.close()
+    '''
+    clearMethodList(path)
+    output = open(path, 'wb+')
+    writeline = ""
+    for line in X:
+        for i in line:
+            writeline += str(i)
+            writeline += "  "
+        output.write(writeline)
+        output.write("\n")
+        writeline = ""
+    output.close()
+
+
+# clear method name list before write
+def clearMethodList(pathwrite):
+    if os.path.isfile(pathwrite):
+        os.remove(pathwrite)
+
+
 if __name__ == "__main__":
     '''path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
     Tobe_Cluster_dir = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/f4f82d64b802e98101542a270d2b41afd667a9e7.txt"

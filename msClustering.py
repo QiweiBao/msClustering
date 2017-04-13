@@ -1,5 +1,5 @@
 import ClusteringCollection
-import data_extract
+import utils
 import MethodListExtraction
 import os
 import linearRegression
@@ -23,33 +23,33 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
     global y_pred
     path = workspace + path
     path_flat = workspace + path_flat
-    paths = data_extract.readfilelist(path)
-    path_flats = data_extract.readfilelist(path_flat)
+    paths = utils.readfilelist(path)
+    path_flats = utils.readfilelist(path_flat)
     for Tobe_Cluster_dir, Flat_dir in zip(paths, path_flats):
         # read flat time proportion
-        X = data_extract.fileread(Tobe_Cluster_dir)
+        X = utils.fileread(Tobe_Cluster_dir)
         method_name_path = path + "MethodNameList.txt"
-        method_list = data_extract.method_read(method_name_path)
-        orderindex = data_extract.readmethodnames()
-        X = data_extract.insertzero(X, method_list, orderindex)
-        X = data_extract.deleteword(X)
+        method_list = utils.method_read(method_name_path)
+        orderindex = utils.readmethodnames()
+        X = utils.insertzero(X, method_list, orderindex)
+        X = utils.deleteword(X)
         print "original number of methods: " + str(len(X))
 
         # the second parameter is threshold
         # X = data_extract.removeSeldomUsingMethods(X, 0.5)
 
         print "number of methods after removing infrequent methods:" + str(len(X))
-        X = data_extract.reverse(X, orderindex)
-        X = data_extract.normalization(X)
+        X = utils.reverse(X, orderindex)
+        X = utils.normalization(X)
 
         # using scikit to normalize
         # X = StandardScaler().fit_transform(X)
 
         # read flat time. Do not need normalization.
-        X_flat = data_extract.fileread(Flat_dir)
-        X_flat = data_extract.insertzero(X_flat, method_list, orderindex)
-        X_flat = data_extract.deleteword(X_flat)
-        X_flat = data_extract.reverse(X_flat, orderindex)
+        X_flat = utils.fileread(Flat_dir)
+        X_flat = utils.insertzero(X_flat, method_list, orderindex)
+        X_flat = utils.deleteword(X_flat)
+        X_flat = utils.reverse(X_flat, orderindex)
 
         '''
             TODO
@@ -58,7 +58,7 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         pieces = Tobe_Cluster_dir.split('/')
         version_name = pieces[len(pieces) - 1]
         version_name = version_name[:len(version_name) - 4]
-        Y = extract_totaltime_each(workspace + path_pprof + version_name + '/')
+        Y = utils.extract_totaltime_each(workspace + path_pprof + version_name + '/')
 
         # output dir for clustering result pictures
         dir_pieces = Tobe_Cluster_dir.split('/')
@@ -68,7 +68,7 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         if not os.path.exists(pic_dir):
             os.mkdir(pic_dir)
 
-        output_matrix(X, pic_dir, png_name[:len(png_name) - 10])
+            utils.output_matrix(X, pic_dir, png_name[:len(png_name) - 10])
 
         pic_dir += png_name
 
@@ -80,12 +80,12 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
             clu_DBSCAN(X, pic_dir, plot_in_2D)
         elif clu_method is "Spectral":
             y_pred = clu_spectral(X, pic_dir, num_clusters, plot_in_2D)
-            clusters = cluster_mapping(y_pred, X_flat)
-            total_times = cluster_mapping(y_pred, Y)
+            clusters = utils.cluster_mapping(y_pred, X_flat)
+            total_times = utils.cluster_mapping(y_pred, Y)
             clusters_num = 1
             for cluster_X, total_time_Y in zip(clusters, total_times):
                 # linear_regression(cluster_X, total_time_Y)
-                output_matrix(cluster_X, pic_dir[:len(pic_dir)-4], "_X"+str(clusters_num))
+                utils.output_matrix(cluster_X, pic_dir[:len(pic_dir)-4], "_X"+str(clusters_num))
                 #output_matrix(total_time_Y, pic_dir, "total_time_Y"+str(num_clusters))
                 outputdir = pic_dir[:len(pic_dir)-4] + "_Y"+str(clusters_num) + ".txt"
                 MethodListExtraction.writeMethodList(total_time_Y, outputdir)
@@ -95,85 +95,12 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
             return
 
 
-def extract_totaltime_each(path):
-    files_dir = os.listdir(path)
-    # files_dir = sorted(files_dir)
-    # files_dir.sort()
-    files_dir = natural_sort(files_dir)
-    Y = list()
-    for file_dir in files_dir:
-        file = open(path + file_dir, "r")
-        line_one = file.readline()
-        line_one = line_one.split()
-        total_time = line_one[0]
-        if total_time.__contains__('ms'):
-            total_time = total_time[: len(total_time) - 2]
-            total_time = long(total_time) / 1000
-            total_time = str(total_time)
-        else:
-            total_time = total_time[: len(total_time) - 1]
-        Y.append(total_time)
-
-    return Y
-
-
-def natural_sort(l):
-    convert = lambda text: int(text) if text.isdigit() else text.lower()
-    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
-    return sorted(l, key=alphanum_key)
 
 
 def linear_regression(X, Y):
     linearRegression.simpleEquation(X, Y)
 
 
-# map original data into small clusters based on index
-'''
-For now, the clusters number is 2.
-If the clusters number is not fixed, bug remains.
-'''
-def cluster_mapping(index_list, X):
-    clu_one = list()
-    clu_two = list()
-    for index in range(0, len(index_list)):
-        if index_list[index] == 0:
-            clu_one.append(X[index])
-        elif index_list[index] == 1:
-            clu_two.append(X[index])
-
-    clusters = list()
-    clusters.append(clu_one)
-    clusters.append(clu_two)
-    return clusters
-
-
-def output_matrix(X, pic_dir, file_name):
-    path = pic_dir + file_name + ".txt"
-    '''
-    f = open(path, "w")
-    for row in X:
-        # f.writelines("%s " % item for item in row)
-        f.write(row)
-        f.write('\n')
-    f.close()
-    '''
-    clearMethodList(path)
-    output = open(path, 'wb+')
-    writeline = ""
-    for line in X:
-        for i in line:
-            writeline += str(i)
-            writeline += "  "
-        output.write(writeline)
-        output.write("\n")
-        writeline = ""
-    output.close()
-
-
-# clear method name list before write
-def clearMethodList(pathwrite):
-    if os.path.isfile(pathwrite):
-        os.remove(pathwrite)
 
 def clu_Hierarchical(X, pic_dir):
     # hierarchical clustering
