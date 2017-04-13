@@ -248,6 +248,60 @@ def clearMethodList(pathwrite):
     if os.path.isfile(pathwrite):
         os.remove(pathwrite)
 
+'''
+sample input:
+
+if __name__ == "__main__":
+    dir1 = "/home/majunqi/research/cc-sample-largesize1500/1"
+    dir2 = "/home/majunqi/research/cc-sample-largesize1500/2"
+    dir3 = "/home/majunqi/research/cc-sample-largesize1500/3"
+    dir4 = "/home/majunqi/research/cc-sample-largesize1500/4"
+    dir5 = "/home/majunqi/research/cc-sample-largesize1500/5"
+    dir6 = "/home/majunqi/research/cc-sample-largesize1500/6"
+
+    dirs = [dir1, dir2,dir3,dir4,dir5,dir6]
+    paths = sortfile_size(dirs, True)
+    f = open('/home/majunqi/Desktop/order_size.txt', 'w')
+    for path in paths:
+        f.write(path+'\n')
+    f.close()
+        
+'''
+
+def sortfile_size(dirnames, reverse=False):
+    """ Return list of file paths in directory sorted by file size """
+
+    # Get list of files
+    filepaths = []
+    for dirname in dirnames:
+        for basename in os.listdir(dirname):
+            filename = os.path.join(dirname, basename)
+            if os.path.isfile(filename):
+                filepaths.append(filename)
+
+    # Re-populate list with filename, size tuples
+    for i in xrange(len(filepaths)):
+        filepaths[i] = (filepaths[i], os.path.getsize(filepaths[i]))
+
+    # Sort list by file size
+    # If reverse=True sort from largest to smallest
+    # If reverse=False sort from smallest to largest
+    filepaths.sort(key=lambda filename: filename[1], reverse=reverse)
+
+    # Re-populate list with just filenames
+    for i in xrange(len(filepaths)):
+        filepaths[i] = filepaths[i][0]
+
+    i = 0
+    names = []
+    for filename in filepaths:
+        pieces = filename.split('/')
+        filename = pieces[len(pieces)-1]
+
+        names.append(filename[:len(filename)-5])
+        i += 1
+    return names
+
 
 if __name__ == "__main__":
     '''path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
