@@ -19,7 +19,7 @@ def createMethodList(path):
     print "Method list created."
 
 
-def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters, plot_in_2D=True, orderInSizeDir):
+def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters, plot_in_2D=True, orderInSizeDir=None):
     global y_pred
     path = workspace + path
     path_flat = workspace + path_flat
@@ -41,7 +41,13 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         print "number of methods after removing infrequent methods:" + str(len(X))
         X = utils.reverse(X, orderindex)
         X = utils.normalization(X)
-        X = utils.reorderMetrix(X, orderInSizeDir)
+
+        X_tmp = utils.reorder_matrix_size(X, orderInSizeDir)
+        if X_tmp is None:
+            print "Oh, shit, it's wrong"
+            return
+        else:
+            X = X_tmp
 
         # using scikit to normalize
         # X = StandardScaler().fit_transform(X)
@@ -51,8 +57,13 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         X_flat = utils.insertzero(X_flat, method_list, orderindex)
         X_flat = utils.deleteword(X_flat)
         X_flat = utils.reverse(X_flat, orderindex)
-        X_flat = utils.reorderMetrix(X_flat, orderInSizeDir)
 
+        X_tmp = utils.reorder_matrix_size(X_flat, "/home/majunqi/Desktop/order_in_size.txt")
+        if X_tmp is None:
+            print "Oh, shit, it's wrong"
+            return
+        else:
+            X_flat = X_tmp
 
         '''
             TODO
@@ -62,7 +73,13 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         version_name = pieces[len(pieces) - 1]
         version_name = version_name[:len(version_name) - 4]
         Y = utils.extract_totaltime_each(workspace + path_pprof + version_name + '/')
-        Y = utils.reorderMetrix(Y, orderInSizeDir)
+
+        Y_tmp = utils.reorder_matrix_size(Y, "/home/majunqi/Desktop/order_in_size.txt")
+        if Y_tmp is None:
+            print "Oh, shit, it's wrong"
+            return
+        else:
+            Y = Y_tmp
 
         # output dir for clustering result pictures
         dir_pieces = Tobe_Cluster_dir.split('/')
@@ -138,7 +155,8 @@ if __name__ == "__main__":
     path = "processed_data_largesize/"
     path_flat = "processed_data_largesize_flat/"
     path_pprof = "profdata_pfm_largesize_classified/"
-    orderInSizeDir = "/Users/qiweibao/Code/Python/InputData/order_in_size.txt"
+    # orderInSizeDir = "/Users/qiweibao/Code/Python/InputData/order_in_size.txt"
+    orderInSizeDir = "/home/majunqi/Desktop/order_in_size.txt"
 
     # if method list already exists, comment out this line
     # createMethodList(path)

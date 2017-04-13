@@ -69,6 +69,7 @@ def method_read(dirname):
                     res.append(data)
     return res
 
+
 # Normalize data. Output should be within 0~1.
 def normalization(X):
     maxdata = 0.0
@@ -89,6 +90,7 @@ def normalization(X):
         tmp = []
     res = np.array(res)
     return res
+
 
 # If one method exist in the list of method names but not in one version, data of this method in this HTML file should be all zero.
 def insertzero(X, method_list, orderindex):
@@ -157,6 +159,7 @@ def readmethodnames():
     res.append(maxorder)
     return res
 
+
 def removeSeldomUsingMethods(X, threshold):
     # row is method
     # column is html
@@ -167,7 +170,7 @@ def removeSeldomUsingMethods(X, threshold):
         for html in method:
             total = total + float(html)
             num += 1
-        if total/num >= threshold:
+        if total / num >= threshold:
             new_X.append(method)
     return new_X
 
@@ -205,6 +208,8 @@ def natural_sort(l):
 For now, the clusters number is 2.
 If the clusters number is not fixed, bug remains.
 '''
+
+
 def cluster_mapping(index_list, X):
     clu_one = list()
     clu_two = list()
@@ -248,6 +253,7 @@ def clearMethodList(pathwrite):
     if os.path.isfile(pathwrite):
         os.remove(pathwrite)
 
+
 '''
 sample input:
 
@@ -268,8 +274,9 @@ if __name__ == "__main__":
 
 '''
 
-#reverse = True: sort file from large to small
-#reverse = False: sort file from small to large
+
+# reverse = True: sort file from large to small
+# reverse = False: sort file from small to large
 
 def sortfile_size(dirnames, reverse=False):
     """ Return list of file paths in directory sorted by file size """
@@ -299,14 +306,15 @@ def sortfile_size(dirnames, reverse=False):
     names = []
     for filename in filepaths:
         pieces = filename.split('/')
-        filename = pieces[len(pieces)-1]
+        filename = pieces[len(pieces) - 1]
 
-        names.append(filename[:len(filename)-5])
+        names.append(filename[:len(filename) - 5])
         i += 1
     return names
 
+
 # Re-order metrix by html size.
-def reorderMetrix(X, orderInSizeDir):
+def reorder_matrix_size(X, orderInSizeDir):
     htmlSizeOrders = open(orderInSizeDir)
     htmlSizeOrder = []
     while True:
@@ -315,11 +323,9 @@ def reorderMetrix(X, orderInSizeDir):
             break
         else:
             htmlSizeOrder.append(int(read))
-    if len(X) is len(htmlSizeOrder):
-        continue
-    else:
-        print "number of order don't match metrix."
-        return
+    if len(X) is not len(htmlSizeOrder):
+        print "number of order don't match matrix"
+        return None
     htmlIndexBySize = sorted(range(len(htmlSizeOrder)), key=lambda k: htmlSizeOrder[k])
     res = []
     for index in htmlIndexBySize:
