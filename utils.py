@@ -121,7 +121,7 @@ def reverse(X, orderindex):
     tmp = []
     res = []
     start = orderindex[0]
-    end = orderindex[1]
+    end = orderindex[1] + 1
     for init in range(start, end):
         index = order.index(str(init))
         for i in X:
@@ -323,9 +323,9 @@ def reorder_matrix_size(X, orderInSizeDir):
             break
         else:
             htmlSizeOrder.append(int(read))
-    if len(X) is not len(htmlSizeOrder):
-        print "number of order don't match matrix"
-        return None
+    if len(X) != len(htmlSizeOrder):
+        print "number of order doesn't match matrix lines"
+        return
     htmlIndexBySize = sorted(range(len(htmlSizeOrder)), key=lambda k: htmlSizeOrder[k])
     res = []
     for index in htmlIndexBySize:
