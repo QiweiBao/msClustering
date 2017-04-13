@@ -305,6 +305,24 @@ def sortfile_size(dirnames, reverse=False):
         i += 1
     return names
 
+# Re-order metrix by html size.
+def reorderMetrix(X, orderInSizeDir):
+    htmlSizeOrders = open(orderInSizeDir)
+    htmlSizeOrder = []
+    while True:
+        read = htmlSizeOrders.readline()
+        if not read:
+            break
+        else:
+            htmlSizeOrder.append(int(read))
+    htmlIndexBySize = sorted(range(len(htmlSizeOrder)), key=lambda k: htmlSizeOrder[k])
+    print htmlIndexBySize
+    res = []
+    for index in htmlIndexBySize:
+        res.append(X[index])
+    res = np.array(res)
+    return res
+
 
 if __name__ == "__main__":
     '''path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
