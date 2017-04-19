@@ -163,15 +163,15 @@ def clu_DBSCAN(X, pic_dir, plot_in_2D):
 if __name__ == "__main__":
     # path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
 
-    workspace = "/home/majunqi/research/result/test_automation_test/"
-    # workspace = "/Users/qiweibao/Data/InputData/test_automation_test/"
+    # workspace = "/home/majunqi/research/result/test_automation_test/"
+    workspace = "/Users/qiweibao/Data/InputData/test_automation_test/"
 
     path = "processed_data_largesize/"
     path_flat = "processed_data_largesize_flat/"
     path_pprof = "profdata_pfm_largesize_classified/"
 
-    # orderInSizeDir = "/Users/qiweibao/Code/Python/order_in_size.txt"
-    orderInSizeDir = "/home/majunqi/Desktop/order_in_size.txt"
+    orderInSizeDir = "/Users/qiweibao/Code/Python/order_in_size.txt"
+    # orderInSizeDir = "/home/majunqi/Desktop/order_in_size.txt"
 
 
     # if method list already exists, comment out this line
@@ -181,7 +181,7 @@ if __name__ == "__main__":
     # clu_method = "Hierarchical"
     # clu_method = "DBSCAN"
     # clu_method = "Kmeans"
-    clu_method = "Spectral"
+    clu_method = "Kmeans"
     clusters = 2
     # plot either in 2D or 3D
     twoD = False

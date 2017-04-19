@@ -209,7 +209,7 @@ For now, the clusters number is 2.
 If the clusters number is not fixed, bug remains.
 '''
 
-
+'''
 def cluster_mapping(index_list, X):
     clu_one = list()
     clu_two = list()
@@ -227,7 +227,25 @@ def cluster_mapping(index_list, X):
     clusters.append(clu_one)
     clusters.append(clu_two)
     return clusters
+'''
 
+def cluster_mapping(index_list, X):
+    clu_tmp = []
+    cluster = []
+    start = index_list[0]
+    end = index_list[0]
+    for i in index_list:
+        if i < start:
+            start = i
+        if i > end:
+            end = i
+    for clu_number in range(end - start + 1):
+        for index in range(0, len(index_list)):
+            if index_list[index] == start:
+                clu_tmp.append(X[index])
+        cluster.append(clu_tmp)
+
+    return cluster
 
 def output_matrix(X, pic_dir, file_name):
     path = pic_dir + file_name + ".txt"
