@@ -160,8 +160,8 @@ def MeanandDev(X):
 
 
 # K-means algorithm, inputs are features and number of clusters to take
-def createKmeans(X, picdir):
-    centroids, variance = kmeans(X, 3)
+def createKmeans(X, picdir, clusters):
+    centroids, variance = kmeans(X, clusters)
     code, distance = vq(X, centroids)
     figure()
     ndx = where(code == 0)[0]

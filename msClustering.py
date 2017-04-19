@@ -95,18 +95,20 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         if clu_method is "Hierarchical":
             clu_Hierarchical(X, pic_dir)
         elif clu_method is "Kmeans":
-            clu_Kmeans(X, pic_dir)
+
+            clu_Kmeans(X, pic_dir, num_clusters)
+
         elif clu_method is "DBSCAN":
             clu_DBSCAN(X, pic_dir, plot_in_2D)
         elif clu_method is "Spectral":
-            y_pred = clu_spectral(X, pic_dir, num_clusters, plot_in_2D)
-            clusters = utils.cluster_mapping(y_pred, X_flat)
-            total_times = utils.cluster_mapping(y_pred, Y)
+            cluster_idx = clu_spectral(X, pic_dir, num_clusters, plot_in_2D)
+            clusters = utils.cluster_mapping(cluster_idx, X_flat)
+            total_times = utils.cluster_mapping(cluster_idx, Y)
             clusters_num = 1
             for cluster_X, total_time_Y in zip(clusters, total_times):
                 # linear_regression(cluster_X, total_time_Y)
                 utils.output_matrix(cluster_X, pic_dir[:len(pic_dir)-4], "_X"+str(clusters_num))
-                #output_matrix(total_time_Y, pic_dir, "total_time_Y"+str(num_clusters))
+                # output_matrix(total_time_Y, pic_dir, "total_time_Y"+str(num_clusters))
                 outputdir = pic_dir[:len(pic_dir)-4] + "_Y"+str(clusters_num) + ".txt"
                 MethodListExtraction.writeMethodList(total_time_Y, outputdir)
                 clusters_num += 1
@@ -131,15 +133,15 @@ def clu_Hierarchical(X, pic_dir):
     ClusteringCollection.drawHierarchical(Cl_result, pic_dir)
 
 
-def clu_spectral(X, pic_dir, clusters, plot_in_2D):
+def clu_spectral(X, pic_dir, num_clusters, plot_in_2D):
     # TODO
-    y_pred = ClusteringCollection.Spectral_Cluster(X, pic_dir, clusters, plot_in_2D)
-    return y_pred
+    cluster_idx = ClusteringCollection.Spectral_Cluster(X, pic_dir, num_clusters, plot_in_2D)
+    return cluster_idx
 
 
-def clu_Kmeans(X, pic_dir):
+def clu_Kmeans(X, pic_dir, num_clusters):
     # kmeans clustering
-    ClusteringCollection.createKmeans(X, pic_dir)
+    ClusteringCollection.createKmeans(X, pic_dir, num_clusters)
 
 
 def clu_DBSCAN(X, pic_dir, plot_in_2D):
@@ -149,13 +151,16 @@ def clu_DBSCAN(X, pic_dir, plot_in_2D):
 
 if __name__ == "__main__":
     # path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
-    # workspace = "/home/majunqi/research/result/test_automation_test/"
-    workspace = "/Users/qiweibao/Data/InputData/test_automation_test/"
+
+    workspace = "/home/majunqi/research/result/test_automation_test/"
+    # workspace = "/Users/qiweibao/Data/InputData/test_automation_test/"
+
     path = "processed_data_largesize/"
     path_flat = "processed_data_largesize_flat/"
     path_pprof = "profdata_pfm_largesize_classified/"
-    orderInSizeDir = "/Users/qiweibao/Code/Python/order_in_size.txt"
-    # orderInSizeDir = "/home/majunqi/Desktop/order_in_size.txt"
+
+    # orderInSizeDir = "/Users/qiweibao/Code/Python/order_in_size.txt"
+    orderInSizeDir = "/home/majunqi/Desktop/order_in_size.txt"
 
 
     # if method list already exists, comment out this line
@@ -163,9 +168,9 @@ if __name__ == "__main__":
 
     # choose clustering method
     # clu_method = "Hierarchical"
-    # clu_method = "DBSCAN"
+    clu_method = "DBSCAN"
     # clu_method = "Kmeans"
-    clu_method = "Spectral"
+    # clu_method = "Spectral"
     clusters = 2
     # plot either in 2D or 3D
     twoD = False
