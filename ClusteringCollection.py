@@ -247,6 +247,9 @@ def DBSCAN(X, pic_dir, plot_in_2D):
     core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
     core_samples_mask[db.core_sample_indices_] = True
     labels = db.labels_
+    cluster_idx = []
+    for i in labels:
+        cluster_idx.append(i)
 
     # Number of clusters in labels, ignoring noise if present.
     n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
@@ -286,9 +289,10 @@ def DBSCAN(X, pic_dir, plot_in_2D):
             times += 1
         plt.legend(loc='upper left')
     plt.title('Estimated number of clusters: %d' % n_clusters_)
-    plt.show()
-
+    # plt.show()
     # savefig(pic_dir)
+    return cluster_idx
+
     # print('Estimated number of clusters: %d' % n_clusters_)
     # print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels_true, labels))
     # print("Completeness: %0.3f" % metrics.completeness_score(labels_true, labels))
@@ -304,6 +308,8 @@ if __name__ == "__main__":
     '''dirname = "/Users/qiweibao/Data/InputData/data.txt"
     X = fileread(dirname)
     #X = normalization(X)
+    pic_dir = "/Users/qiweibao/Data/"
+    DBSCAN(X, pic_dir, True)
     outputdir = "/Users/qiweibao/Code/Python/Output.png"
     Spectral_Cluster(X, outputdir, 3, True)
 

@@ -235,15 +235,16 @@ def cluster_mapping(index_list, X):
     start = index_list[0]
     end = index_list[0]
     for i in index_list:
-        if i < start:
+        if (i != -1) and ((i < start) or (start is -1)):
             start = i
         if i > end:
             end = i
     for clu_number in range(end - start + 1):
         for index in range(0, len(index_list)):
-            if index_list[index] == start:
+            if index_list[index] == clu_number:
                 clu_tmp.append(X[index])
         cluster.append(clu_tmp)
+        clu_tmp = []
 
     return cluster
 

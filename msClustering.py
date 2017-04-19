@@ -88,7 +88,8 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         if not os.path.exists(pic_dir):
             os.mkdir(pic_dir)
 
-        utils.output_matrix(X, pic_dir, png_name[:len(png_name) - 10])
+        utils.output_matrix(X, pic_dir, png_name[:len(png_name) - 4] + "X")
+        utils.output_matrix(Y, pic_dir, png_name[:len(png_name) - 4] + "Y")
 
         pic_dir += png_name
 
@@ -100,7 +101,8 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
             print cluster_idx
             split_data_from_cluster(cluster_idx, X_flat, Y, pic_dir)
         elif clu_method is "DBSCAN":
-            clu_DBSCAN(X, pic_dir, plot_in_2D)
+            cluster_idx = clu_DBSCAN(X, pic_dir, plot_in_2D)
+            split_data_from_cluster(cluster_idx, X_flat, Y, pic_dir)
         elif clu_method is "Spectral":
             cluster_idx = clu_spectral(X, pic_dir, num_clusters, plot_in_2D)
             clusters = utils.cluster_mapping(cluster_idx, X_flat)
@@ -156,8 +158,9 @@ def clu_Kmeans(X, pic_dir, num_clusters):
 
 
 def clu_DBSCAN(X, pic_dir, plot_in_2D):
-    Cl_result = ClusteringCollection.DBSCAN(X, pic_dir, plot_in_2D)
+    cluster_idx = ClusteringCollection.DBSCAN(X, pic_dir, plot_in_2D)
     # ClusteringCollection.drawDBSCAN(Cl_result, pic_dir)
+    return cluster_idx
 
 
 if __name__ == "__main__":
@@ -181,7 +184,7 @@ if __name__ == "__main__":
     # clu_method = "Hierarchical"
     # clu_method = "DBSCAN"
     # clu_method = "Kmeans"
-    clu_method = "Kmeans"
+    clu_method = "DBSCAN"
     clusters = 2
     # plot either in 2D or 3D
     twoD = False
