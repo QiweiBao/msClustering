@@ -1,7 +1,9 @@
 from matplotlib import pyplot as plt
 from scipy.cluster.hierarchy import dendrogram, linkage
 import numpy as np
+from sklearn.cluster import KMeans
 from scipy.cluster.hierarchy import cophenet
+from scipy.cluster.hierarchy import fcluster
 from scipy.spatial.distance import pdist
 import re
 from pylab import *
@@ -78,9 +80,10 @@ def pca(X, n):
 
 
 # Hierarchical clustering
-def HierarchicalCluster(X):
+def HierarchicalCluster(X, num_clusters):
     Cl_result = linkage(X, 'ward')
-    return Cl_result
+    cluster_idx = fcluster(Cl_result, num_clusters, criterion='maxclust')
+    return Cl_result, cluster_idx
 
 
 # Use cophenet evaluating clustering performance
@@ -161,7 +164,7 @@ def MeanandDev(X):
 
 # K-means algorithm, inputs are features and number of clusters to take
 def createKmeans(X, picdir, clusters):
-    centroids, variance = kmeans(X, clusters)
+    '''centroids, variance = kmeans(X, clusters)
     code, distance = vq(X, centroids)
     figure()
     ndx = where(code == 0)[0]
@@ -173,7 +176,12 @@ def createKmeans(X, picdir, clusters):
     plot(centroids[:, 0], centroids[:, 1], 'go')
     axis('off')
     # show()
-    savefig(picdir)
+    savefig(picdir)'''
+    estimator = KMeans(clusters)
+    estimator.fit(X)
+    res = estimator.labels_
+    print res
+    return res.tolist()
 
 
 # use seaborn to show result visualize.
@@ -293,7 +301,7 @@ def DBSCAN(X, pic_dir, plot_in_2D):
     #       % metrics.silhouette_score(X, labels))
 
 if __name__ == "__main__":
-    '''dirname = "/Users/qiweibao/Code/Python/Inputdata/data.txt"
+    '''dirname = "/Users/qiweibao/Data/InputData/data.txt"
     X = fileread(dirname)
     #X = normalization(X)
     outputdir = "/Users/qiweibao/Code/Python/Output.png"

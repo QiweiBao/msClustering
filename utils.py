@@ -213,10 +213,14 @@ If the clusters number is not fixed, bug remains.
 def cluster_mapping(index_list, X):
     clu_one = list()
     clu_two = list()
+    start = index_list[0]
+    for i in index_list:
+        if i < start:
+            start = i
     for index in range(0, len(index_list)):
-        if index_list[index] == 0:
+        if index_list[index] == start:
             clu_one.append(X[index])
-        elif index_list[index] == 1:
+        elif index_list[index] == start + 1:
             clu_two.append(X[index])
 
     clusters = list()
