@@ -36,17 +36,24 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         print "original number of methods: " + str(len(X))
 
         # the second parameter is threshold
-        # X = data_extract.removeSeldomUsingMethods(X, 0.5)
+        # X = utils.removeSeldomUsingMethods(X, 0.3)
+
+        # the second parameter is threshold
+        remove_idxes = utils.removeSeldomUsingMethods_byIdx(X, 0.2)
+        X = utils.remove_methods_byIdx(X, remove_idxes)
+
         print "number of methods after removing infrequent methods:" + str(len(X))
         X = utils.reverse(X, orderindex)
         X = utils.normalization(X)
 
+        '''
         X_tmp = utils.reorder_matrix_size(X, orderInSizeDir)
         if X_tmp is None:
             print "Oh, shit, it's wrong"
             return
         else:
             X = X_tmp
+        '''
 
         # using scikit to normalize
         # X = StandardScaler().fit_transform(X)
@@ -55,14 +62,20 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         X_flat = utils.fileread(Flat_dir)
         X_flat = utils.insertzero(X_flat, method_list, orderindex)
         X_flat = utils.deleteword(X_flat)
+
+        X_flat = utils.remove_methods_byIdx(X_flat, remove_idxes)
+
         X_flat = utils.reverse(X_flat, orderindex)
 
+        '''
         X_tmp = utils.reorder_matrix_size(X_flat, orderInSizeDir)
         if X_tmp is None:
             print "Oh, shit, it's wrong"
             return
         else:
             X_flat = X_tmp
+        '''
+
 
         '''
             TODO
@@ -73,12 +86,16 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         version_name = version_name[:len(version_name) - 4]
         Y = utils.extract_totaltime_each(workspace + path_pprof + version_name + '/')
 
+        # Y = utils.remove_methods_byIdx(Y, remove_idxes)
+
+        '''
         Y_tmp = utils.reorder_matrix_size(Y, orderInSizeDir)
         if Y_tmp is None:
             print "Oh, shit, it's wrong"
             return
         else:
             Y = Y_tmp
+        '''
 
         # output dir for clustering result pictures
         dir_pieces = Tobe_Cluster_dir.split('/')
@@ -89,7 +106,9 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
             os.mkdir(pic_dir)
 
         utils.output_matrix(X, pic_dir, png_name[:len(png_name) - 4] + "X")
-        utils.output_matrix(Y, pic_dir, png_name[:len(png_name) - 4] + "Y")
+        # utils.output_matrix(Y, pic_dir, png_name[:len(png_name) - 4] + "Y")
+        outputdir = pic_dir + png_name[:len(png_name) - 4] + "Y.txt"
+        MethodListExtraction.writeMethodList(Y, outputdir)
 
         pic_dir += png_name
 
@@ -166,15 +185,15 @@ def clu_DBSCAN(X, pic_dir, plot_in_2D):
 if __name__ == "__main__":
     # path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
 
-    # workspace = "/home/majunqi/research/result/test_automation_test/"
-    workspace = "/Users/qiweibao/Data/InputData/test_automation_test/"
+    workspace = "/home/majunqi/research/result/test_automation_test/"
+    # workspace = "/Users/qiweibao/Data/InputData/test_automation_test/"
 
     path = "processed_data_largesize/"
     path_flat = "processed_data_largesize_flat/"
     path_pprof = "profdata_pfm_largesize_classified/"
 
-    orderInSizeDir = "/Users/qiweibao/Code/Python/order_in_size.txt"
-    # orderInSizeDir = "/home/majunqi/Desktop/order_in_size.txt"
+    # orderInSizeDir = "/Users/qiweibao/Code/Python/order_in_size.txt"
+    orderInSizeDir = "/home/majunqi/Desktop/order_in_size.txt"
 
 
     # if method list already exists, comment out this line
@@ -184,7 +203,7 @@ if __name__ == "__main__":
     # clu_method = "Hierarchical"
     # clu_method = "DBSCAN"
     # clu_method = "Kmeans"
-    clu_method = "DBSCAN"
+    clu_method = "Spectral"
     clusters = 2
     # plot either in 2D or 3D
     twoD = False

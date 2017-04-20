@@ -160,6 +160,7 @@ def readmethodnames():
     return res
 
 
+# old, maybe not useful
 def removeSeldomUsingMethods(X, threshold):
     # row is method
     # column is html
@@ -172,6 +173,34 @@ def removeSeldomUsingMethods(X, threshold):
             num += 1
         if total / num >= threshold:
             new_X.append(method)
+    return new_X
+
+
+def removeSeldomUsingMethods_byIdx(X, threshold):
+    # row is method
+    # column is html
+    remove_idxes = []
+    idx = 0
+    for method in X:
+        total = 0
+        num = 0
+        for html in method:
+            total = total + float(html)
+            num += 1
+        if total / num >= threshold:
+            remove_idxes.append(idx)
+        idx += 1
+    return remove_idxes
+
+
+def remove_methods_byIdx(X, remove_idxes):
+    new_X = []
+    idx_now = 0
+    for idx in remove_idxes:
+        if idx_now != idx:
+            new_X.append(X[idx_now])
+        idx_now += 1
+
     return new_X
 
 
@@ -229,6 +258,7 @@ def cluster_mapping(index_list, X):
     return clusters
 '''
 
+
 def cluster_mapping(index_list, X):
     clu_tmp = []
     cluster = []
@@ -247,6 +277,7 @@ def cluster_mapping(index_list, X):
         clu_tmp = []
 
     return cluster
+
 
 def output_matrix(X, pic_dir, file_name):
     path = pic_dir + file_name + ".txt"
