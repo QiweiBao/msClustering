@@ -215,10 +215,12 @@ def extract_totaltime_each(path):
         line_one = file.readline()
         line_one = line_one.split()
         total_time = line_one[0]
+        #   unit is ms
         if total_time.__contains__('ms'):
             total_time = total_time[: len(total_time) - 2]
             total_time = long(total_time) / 1000
             total_time = str(total_time)
+        # unit is s
         else:
             total_time = total_time[: len(total_time) - 1]
         Y.append(total_time)
