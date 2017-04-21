@@ -39,8 +39,8 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         # X = utils.removeSeldomUsingMethods(X, 0.3)
 
         # the second parameter is threshold
-        remove_idxes = utils.removeSeldomUsingMethods_byIdx(X, 0.2)
-        X = utils.remove_methods_byIdx(X, remove_idxes)
+        # remove_idxes = utils.removeSeldomUsingMethods_byIdx(X, 0.2)
+        # X = utils.remove_methods_byIdx(X, remove_idxes)
 
         print "number of methods after removing infrequent methods:" + str(len(X))
         X = utils.reverse(X, orderindex)
@@ -63,7 +63,7 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         X_flat = utils.insertzero(X_flat, method_list, orderindex)
         X_flat = utils.deleteword(X_flat)
 
-        X_flat = utils.remove_methods_byIdx(X_flat, remove_idxes)
+        # X_flat = utils.remove_methods_byIdx(X_flat, remove_idxes)
 
         X_flat = utils.reverse(X_flat, orderindex)
 
@@ -101,7 +101,7 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         dir_pieces = Tobe_Cluster_dir.split('/')
         png_name = dir_pieces[len(dir_pieces) - 1]
         png_name = png_name[:len(png_name) - 4] + ".png"
-        pic_dir = Tobe_Cluster_dir[:len(Tobe_Cluster_dir) - len(dir_pieces[len(dir_pieces) - 1])] + "pics/"
+        pic_dir = Tobe_Cluster_dir[:len(Tobe_Cluster_dir) - len(dir_pieces[len(dir_pieces) - 1])] + "output/"
         if not os.path.exists(pic_dir):
             os.mkdir(pic_dir)
 
@@ -185,7 +185,7 @@ def clu_DBSCAN(X, pic_dir, plot_in_2D):
 if __name__ == "__main__":
     # path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
 
-    workspace = "/home/majunqi/research/result/test_automation_test/"
+    workspace = "/home/majunqi/research/result/test_automation_right_flat/"
     # workspace = "/Users/qiweibao/Data/InputData/test_automation_test/"
 
     path = "processed_data_largesize/"
@@ -197,7 +197,7 @@ if __name__ == "__main__":
 
 
     # if method list already exists, comment out this line
-    # createMethodList(path)
+    createMethodList(workspace + path)
 
     # choose clustering method
     # clu_method = "Hierarchical"
