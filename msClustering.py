@@ -84,7 +84,13 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         pieces = Tobe_Cluster_dir.split('/')
         version_name = pieces[len(pieces) - 1]
         version_name = version_name[:len(version_name) - 4]
-        Y = utils.extract_totaltime_each(workspace + path_pprof + version_name + '/')
+        # Y = utils.extract_totaltime_each(workspace + path_pprof + version_name + '/')
+
+        # version_name_for_Y is used because the data is so big, i can't copy it from Mac to Linux.
+        version_name_for_Y = Flat_dir.split('/')
+        version_name_for_Y = version_name_for_Y[len(version_name_for_Y)-1]
+        version_name_for_Y = version_name_for_Y[:len(version_name_for_Y)-4]
+        Y = utils.extract_totaltime_each('/media/psf/Home/Downloads/test_automation_421/profiling_data_classified/'+version_name_for_Y+'/data/')
 
         # Y = utils.remove_methods_byIdx(Y, remove_idxes)
 
@@ -165,7 +171,6 @@ def clu_Hierarchical(X, pic_dir, num_clusters):
 
 
 def clu_spectral(X, pic_dir, num_clusters, plot_in_2D):
-    # TODO
     cluster_idx = ClusteringCollection.Spectral_Cluster(X, pic_dir, num_clusters, plot_in_2D)
     return cluster_idx
 
@@ -185,7 +190,7 @@ def clu_DBSCAN(X, pic_dir, plot_in_2D):
 if __name__ == "__main__":
     # path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
 
-    workspace = "/home/majunqi/research/result/test_automation_right_flat/"
+    workspace = "/home/majunqi/research/result/test_test/"
     # workspace = "/Users/qiweibao/Data/InputData/test_automation_test/"
 
     path = "processed_data_largesize/"
@@ -197,7 +202,7 @@ if __name__ == "__main__":
 
 
     # if method list already exists, comment out this line
-    createMethodList(workspace + path)
+    # createMethodList(workspace + path)
 
     # choose clustering method
     # clu_method = "Hierarchical"
