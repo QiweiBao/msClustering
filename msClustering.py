@@ -90,7 +90,7 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         version_name_for_Y = Flat_dir.split('/')
         version_name_for_Y = version_name_for_Y[len(version_name_for_Y)-1]
         version_name_for_Y = version_name_for_Y[:len(version_name_for_Y)-4]
-        Y = utils.extract_totaltime_each('/media/psf/Home/Downloads/test_automation_421/profiling_data_classified/'+version_name_for_Y+'/data/')
+        Y = utils.extract_totaltime_each('/media/psf/Home/Downloads/test_automation_421_old/profdata_pfm_largesize_classified/'+version_name_for_Y+'/data/')
 
         # Y = utils.remove_methods_byIdx(Y, remove_idxes)
 
@@ -209,7 +209,7 @@ if __name__ == "__main__":
     # clu_method = "DBSCAN"
     # clu_method = "Kmeans"
     clu_method = "Spectral"
-    clusters = 2
+    clusters = 4
     # plot either in 2D or 3D
     twoD = False
     dataExtract(workspace, path, path_flat, path_pprof, clu_method, clusters, twoD, orderInSizeDir)
