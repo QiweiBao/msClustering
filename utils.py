@@ -135,11 +135,20 @@ def reverse(X, orderindex):
 # delete method names
 def deleteword(X):
     # todo
+    X = X.tolist()
     res, tmp = [], []
     for line in X:
         for data in line:
+            data = str(data)
             if not re.search('.*([a-zA-Z]+).*', data):
-                tmp.append(data)
+                if ('.' not in data) or (data.split('.')[1] == None):
+                    data = float(data)
+                    tmp.append(data)
+                else:
+                    # truncate 4 numbers after decimal point
+                    data = data.split('.')[0] + '.' + data.split('.')[1][:5]
+                    data = float(data)
+                    tmp.append(data)
         res.append(tmp)
         tmp = []
     res = np.array(res)
