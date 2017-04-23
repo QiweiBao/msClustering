@@ -14,6 +14,7 @@ from pylab import *
 from scipy.cluster.vq import *
 import ClusteringCollection
 import os
+import decimal
 
 order = []
 method = []
@@ -84,8 +85,10 @@ def normalization(X):
     delta = maxdata - mindata
     for line in X:
         for data in line:
+            # data = str(round((data - mindata) / delta, 4))
             data = (data - mindata) / delta
-            tmp.append(data)
+            data = "{0:.4f}".format(data)
+            tmp.append(float(data))
         res.append(tmp)
         tmp = []
     res = np.array(res)
@@ -115,7 +118,6 @@ def insertzero(X, method_list, orderindex):
             res.append(tmp)
     return res
 
-
 # Axisymmetric reverse the matrix so that each line represent to one HTML webpage.
 def reverse(X, orderindex):
     tmp = []
@@ -135,7 +137,7 @@ def reverse(X, orderindex):
 # delete method names
 def deleteword(X):
     # todo
-    X = X.tolist()
+    # X = X.tolist()
     res, tmp = [], []
     for line in X:
         for data in line:
@@ -145,8 +147,8 @@ def deleteword(X):
                     data = float(data)
                     tmp.append(data)
                 else:
-                    # truncate 4 numbers after decimal point
-                    data = data.split('.')[0] + '.' + data.split('.')[1][:5]
+                    # truncate 7 numbers after decimal point
+                    data = data.split('.')[0] + '.' + data.split('.')[1][:7]
                     data = float(data)
                     tmp.append(data)
         res.append(tmp)
@@ -273,14 +275,16 @@ def cluster_mapping(index_list, X):
 def cluster_mapping(index_list, X):
     clu_tmp = []
     cluster = []
-    start = index_list[0]
-    end = index_list[0]
+    # start = index_list[0]
+    # end = index_list[0]
+    start = -1
+    end = -1
     for i in index_list:
         if (i != -1) and ((i < start) or (start is -1)):
             start = i
         if i > end:
             end = i
-    for clu_number in range(end - start + 1):
+    for clu_number in range(start, end + 1):
         for index in range(0, len(index_list)):
             if index_list[index] == clu_number:
                 clu_tmp.append(X[index])

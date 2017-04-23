@@ -90,7 +90,7 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         version_name_for_Y = Flat_dir.split('/')
         version_name_for_Y = version_name_for_Y[len(version_name_for_Y)-1]
         version_name_for_Y = version_name_for_Y[:len(version_name_for_Y)-4]
-        Y = utils.extract_totaltime_each('/media/psf/Home/Downloads/test_automation_421_old/profdata_pfm_largesize_classified/'+version_name_for_Y+'/data/')
+        Y = utils.extract_totaltime_each('/Users/qiweibao/Downloads/test_automation_test_421/profdata_pfm_largesize_classified/'+version_name_for_Y+'/data/')
 
         # Y = utils.remove_methods_byIdx(Y, remove_idxes)
 
@@ -119,11 +119,11 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         pic_dir += png_name
 
         if clu_method is "Hierarchical":
-            cluster_idx = clu_Hierarchical(X, pic_dir, num_clusters)
+            picdir = pic_dir[:len(pic_dir) - 4] + "hierarchical" + ".png"
+            cluster_idx = clu_Hierarchical(X, pic_dir, picdir, num_clusters)
             split_data_from_cluster(cluster_idx, X_flat, Y, pic_dir)
         elif clu_method is "Kmeans":
             cluster_idx = clu_Kmeans(X, pic_dir, num_clusters)
-            print cluster_idx
             split_data_from_cluster(cluster_idx, X_flat, Y, pic_dir)
         elif clu_method is "DBSCAN":
             cluster_idx = clu_DBSCAN(X, pic_dir, plot_in_2D)
@@ -161,12 +161,13 @@ def linear_regression(X, Y):
     linearRegression.simpleEquation(X, Y)
 
 
-def clu_Hierarchical(X, pic_dir, num_clusters):
+def clu_Hierarchical(X, pic_dir, picdir, num_clusters):
     # hierarchical clustering
     Cl_result, cluster_idx = ClusteringCollection.HierarchicalCluster(X, num_clusters)
     cophenet = ClusteringCollection.CophenetEvaluate(Cl_result, X)
     print cophenet
-    ClusteringCollection.drawHierarchical(Cl_result, pic_dir)
+    ClusteringCollection.drawHierarchical(Cl_result, picdir)
+    ClusteringCollection.plotHierarchical(Cl_result, X, cluster_idx, pic_dir)
     return cluster_idx
 
 
@@ -177,7 +178,8 @@ def clu_spectral(X, pic_dir, num_clusters, plot_in_2D):
 
 def clu_Kmeans(X, pic_dir, num_clusters):
     # kmeans clustering
-    cluster_idx = ClusteringCollection.createKmeans(X, pic_dir, num_clusters)
+    cluster_idx = ClusteringCollection.createKmeans(X, num_clusters)
+    ClusteringCollection.plotKmeans(X, cluster_idx, pic_dir)
     return cluster_idx
 
 
@@ -190,15 +192,15 @@ def clu_DBSCAN(X, pic_dir, plot_in_2D):
 if __name__ == "__main__":
     # path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
 
-    workspace = "/home/majunqi/research/result/test_test/"
-    # workspace = "/Users/qiweibao/Data/InputData/test_automation_test/"
+    # workspace = "/home/majunqi/research/result/test_test/"
+    workspace = "/Users/qiweibao/Downloads/test_automation_test_421/"
 
     path = "processed_data_largesize/"
     path_flat = "processed_data_largesize_flat/"
     path_pprof = "profdata_pfm_largesize_classified/"
 
-    # orderInSizeDir = "/Users/qiweibao/Code/Python/order_in_size.txt"
-    orderInSizeDir = "/home/majunqi/Desktop/order_in_size.txt"
+    orderInSizeDir = "/Users/qiweibao/Code/Python/order_in_size.txt"
+    # orderInSizeDir = "/home/majunqi/Desktop/order_in_size.txt"
 
 
     # if method list already exists, comment out this line
@@ -207,9 +209,9 @@ if __name__ == "__main__":
     # choose clustering method
     # clu_method = "Hierarchical"
     # clu_method = "DBSCAN"
-    # clu_method = "Kmeans"
-    clu_method = "Spectral"
-    clusters = 4
+    clu_method = "Kmeans"
+    # clu_method = "Spectral"
+    clusters = 2
     # plot either in 2D or 3D
     twoD = False
     dataExtract(workspace, path, path_flat, path_pprof, clu_method, clusters, twoD, orderInSizeDir)

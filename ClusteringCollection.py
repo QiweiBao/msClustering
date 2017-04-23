@@ -132,6 +132,24 @@ def drawHierarchical(Cl_result, picdir):
     # plt.show()
     savefig(picdir)
 
+# Plot hierarchical picture on 3d
+def plotHierarchical(Cl_result, X, cluster_idx, picdir):
+    colors = np.array([x for x in 'bgrcmykbgrcmykbgrcmykbgrcmyk'])
+    colors = np.hstack([colors] * 20)
+    lowDDataMat, reconMat = pca(X, 3)
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    lowDDataMat, reconMat = pca(X, 3)
+    ax.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0],
+               lowDDataMat[:, 2].ravel().tolist()[0], color=colors[cluster_idx].tolist(), marker='o')
+    if hasattr(Cl_result, 'cluster_centers_'):
+        centers = Cl_result.cluster_centers_
+        center_colors = colors[:len(centers)]
+        print centers
+        ax.scatter(centers[:, 2], centers[:, 3], centers[:, 4], color=center_colors)
+
+    # plt.show()
+    savefig(picdir)
 
 # Calculate mean and deviation to describe the input metrix
 def MeanandDev(X):
@@ -163,7 +181,7 @@ def MeanandDev(X):
 
 
 # K-means algorithm, inputs are features and number of clusters to take
-def createKmeans(X, picdir, clusters):
+def createKmeans(X, clusters):
     '''centroids, variance = kmeans(X, clusters)
     code, distance = vq(X, centroids)
     figure()
@@ -180,9 +198,22 @@ def createKmeans(X, picdir, clusters):
     estimator = KMeans(clusters)
     estimator.fit(X)
     res = estimator.labels_
-    print res
+    # print res
     return res.tolist()
 
+# Plot kmeans picture on 3d
+def plotKmeans(X, cluster_idx, picdir):
+    lowDDataMat, reconMat = pca(X, 3)
+
+    colors = np.array([x for x in 'bgrcmykbgrcmykbgrcmykbgrcmyk'])
+    colors = np.hstack([colors] * 20)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(lowDDataMat[:, 0].ravel().tolist()[0], lowDDataMat[:, 1].ravel().tolist()[0],
+               lowDDataMat[:, 2].ravel().tolist()[0], color=colors[cluster_idx].tolist(), marker='o')
+
+    savefig(picdir)
 
 # use seaborn to show result visualize.
 def Heatmap(X):
