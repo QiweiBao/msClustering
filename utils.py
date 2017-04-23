@@ -86,7 +86,7 @@ def normalization(X):
     for line in X:
         for data in line:
             # data = str(round((data - mindata) / delta, 4))
-            data = (data - mindata) / delta
+            data = float(data - mindata) / float(delta)
             data = "{0:.4f}".format(data)
             tmp.append(float(data))
         res.append(tmp)
