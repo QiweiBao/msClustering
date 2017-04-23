@@ -310,7 +310,7 @@ def output_matrix(X, pic_dir, file_name):
     for line in X:
         for i in line:
             writeline += str(i)
-            writeline += "  "
+            writeline += " "
         output.write(writeline)
         output.write("\n")
         writeline = ""
