@@ -15,6 +15,7 @@ from scipy.cluster.vq import *
 import ClusteringCollection
 import os
 import decimal
+import glob
 
 order = []
 method = []
@@ -118,6 +119,7 @@ def insertzero(X, method_list, orderindex):
             res.append(tmp)
     return res
 
+
 # Axisymmetric reverse the matrix so that each line represent to one HTML webpage.
 def reverse(X, orderindex):
     tmp = []
@@ -215,14 +217,45 @@ def remove_methods_byIdx(X, remove_idxes):
     return new_X
 
 
-def extract_totaltime_each(path):
+def extract_totaltime_each_measured(path, version_name):
+    time_files = glob.glob(path + 'html-ex-' + version_name + "*.time")
+
+    # files_dir = sorted(files_dir)
+    # files_dir.sort()
+
+    time_dir = natural_sort(time_files)
+    Y = list()
+    for file_dir in time_dir:
+        file = open(file_dir, "r")
+        time = file.readline().split('-')
+        total_time = 0
+        for i in time:
+            total_time += float(i)
+        # line_one = file.readline()
+        # line_one = line_one.split('')
+        # total_time = line_one[0]
+
+        # #   unit is ms
+        # if total_time.__contains__('ms'):
+        #     total_time = total_time[: len(total_time) - 2]
+        #     total_time = long(total_time) / 1000
+        #     total_time = str(total_time)
+        # # unit is s
+        # else:
+        #     total_time = total_time[: len(total_time) - 1]
+        Y.append((total_time / len(time)))
+
+    return Y
+
+
+def extract_totaltime_each_from_pprof(path):
     files_dir = os.listdir(path)
     # files_dir = sorted(files_dir)
     # files_dir.sort()
     files_dir = natural_sort(files_dir)
     Y = list()
     for file_dir in files_dir:
-        file = open(path+file_dir, "r")
+        file = open(path + file_dir, "r")
         line_one = file.readline()
         line_one = line_one.split()
         total_time = line_one[0]

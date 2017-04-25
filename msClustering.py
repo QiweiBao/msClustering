@@ -90,7 +90,7 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
         version_name_for_Y = Flat_dir.split('/')
         version_name_for_Y = version_name_for_Y[len(version_name_for_Y)-1]
         version_name_for_Y = version_name_for_Y[:len(version_name_for_Y)-4]
-        Y = utils.extract_totaltime_each('/Users/qiweibao/Downloads/test_automation_test_421/profdata_pfm_largesize_classified/'+version_name_for_Y+'/data/')
+        Y = utils.extract_totaltime_each_measured('/Users/qiweibao/Downloads/users/jxm844/research/result/html_large1500/', version_name_for_Y)
         # Y = utils.extract_totaltime_each('/media/psf/Home/Downloads/test_automation_422/profdata_pfm_largesize_classified/'+version_name_for_Y+'/data/')
 
         # Y = utils.remove_methods_byIdx(Y, remove_idxes)
@@ -194,7 +194,7 @@ if __name__ == "__main__":
     # path = "/Users/qiweibao/Code/Python/InputData/processed_data_largesize/"
 
     # workspace = "/home/majunqi/research/result/test_test/"
-    workspace = "/Users/qiweibao/Downloads/test_automation_test_421/"
+    workspace = "/Users/qiweibao/Downloads/test_automation_test_422/"
     # workspace = "/media/psf/Home/Downloads/test_automation_422/"
 
     path = "processed_data_largesize/"
