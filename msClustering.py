@@ -131,7 +131,8 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
             split_data_from_cluster(cluster_idx, X_flat, Y, pic_dir)
         elif clu_method is "Spectral":
             cluster_idx = clu_spectral(X, pic_dir, num_clusters, plot_in_2D)
-            clusters = utils.cluster_mapping(cluster_idx, X_flat)
+            split_data_from_cluster(cluster_idx, X_flat, Y, pic_dir)
+            '''clusters = utils.cluster_mapping(cluster_idx, X_flat)
             total_times = utils.cluster_mapping(cluster_idx, Y)
             clusters_num = 1
             for cluster_X, total_time_Y in zip(clusters, total_times):
@@ -140,7 +141,7 @@ def dataExtract(workspace, path, path_flat, path_pprof, clu_method, num_clusters
                 # output_matrix(total_time_Y, pic_dir, "total_time_Y"+str(num_clusters))
                 outputdir = pic_dir[:len(pic_dir)-4] + "_Y"+str(clusters_num) + ".txt"
                 MethodListExtraction.writeMethodList(total_time_Y, outputdir)
-                clusters_num += 1
+                clusters_num += 1'''
         else:
             print "error"
             return
@@ -157,6 +158,8 @@ def split_data_from_cluster(cluster_idx, X_flat, Y, pic_dir):
         outputdir = pic_dir[:len(pic_dir)-4] + "_Y"+str(clusters_num) + ".txt"
         MethodListExtraction.writeMethodList(total_time_Y, outputdir)
         clusters_num += 1
+    Clu_idx_dir = pic_dir[:len(pic_dir)-4] + "_idx" + ".txt"
+    MethodListExtraction.writeMethodList(cluster_idx, Clu_idx_dir)
 
 def linear_regression(X, Y):
     linearRegression.simpleEquation(X, Y)
