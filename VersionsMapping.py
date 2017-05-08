@@ -47,8 +47,8 @@ def VersionsMapping(path, version1, version2, reverse):
     return res_c1, res_c2, res_imm_c12, res_imm_c21
 
 
-def output_matrix(X, dir, filename):
-    path = dir + "difference/" + filename + ".txt"
+def output_matrix(X, dir, filename,vers_name):
+    path = dir + "difference-"+ vers_name +"/" + filename + ".txt"
     if os.path.isfile(path):
         os.remove(path)
 
@@ -65,6 +65,7 @@ if __name__ == "__main__":
     path = "processed_data_largesize/output_hierarchical/"
     version1 = "9a0020664ed21d9488647c1ae77194a1cce493ec"
     version2 = "488ab6d9fc7a87aae254f5ae13929d73f253b6f6"
+    vers_name = version1[:5]+'-'+version2[:5]
     reverse = False
     res_c1, res_c2, res_imm_c12, res_imm_c21 = VersionsMapping(workspace + path, version1, version2, reverse)
     output_matrix(res_c1, workspace + path, "C1")
