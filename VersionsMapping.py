@@ -47,8 +47,11 @@ def VersionsMapping(path, version1, version2, reverse):
     return res_c1, res_c2, res_imm_c12, res_imm_c21
 
 
-def output_matrix(X, dir, filename,vers_name):
-    path = dir + "difference-"+ vers_name +"/" + filename + ".txt"
+def output_matrix(X, dir, filename, vers_name):
+    path = dir + "difference-" + vers_name + "/";
+    if not os.path.exists(path):
+        os.mkdir(path)
+    path = path + filename + ".txt"
     if os.path.isfile(path):
         os.remove(path)
 
@@ -68,7 +71,7 @@ if __name__ == "__main__":
     vers_name = version1[:5]+'-'+version2[:5]
     reverse = False
     res_c1, res_c2, res_imm_c12, res_imm_c21 = VersionsMapping(workspace + path, version1, version2, reverse)
-    output_matrix(res_c1, workspace + path, "C1")
-    output_matrix(res_c2, workspace + path, "C2")
-    output_matrix(res_imm_c12, workspace + path, "C12")
-    output_matrix(res_imm_c21, workspace + path, "C21")
+    output_matrix(res_c1, workspace + path, "C1", vers_name)
+    output_matrix(res_c2, workspace + path, "C2", vers_name)
+    output_matrix(res_imm_c12, workspace + path, "C12", vers_name)
+    output_matrix(res_imm_c21, workspace + path, "C21", vers_name)
