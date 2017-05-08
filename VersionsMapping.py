@@ -4,7 +4,7 @@ from pylab import *
 from scipy.spatial.distance import pdist
 import re
 
-def VersionsMapping(path, version1, version2, reverse):
+def VersionsMapping(path, version1, version2, reverse, s, l):
     v1_path = open(path + version1 + "_idx.txt", "r")
     v2_path = open(path + version2 + "_idx.txt", "r")
     v1, v2 = [], []
@@ -20,7 +20,6 @@ def VersionsMapping(path, version1, version2, reverse):
     len_res = len(v1)
     print len_res
     i = 0
-    s, l = '1', '2'
     if reverse is True:
         while (i < len_res):
             if v1[i] == s and v2[i] == s:
@@ -65,12 +64,13 @@ def output_matrix(X, dir, filename, vers_name):
 
 if __name__ == "__main__":
     workspace = "/Users/qiweibao/Downloads/test_automation_test_422/"
-    path = "processed_data_largesize/output_hierarchical/"
-    version1 = "9a0020664ed21d9488647c1ae77194a1cce493ec"
-    version2 = "488ab6d9fc7a87aae254f5ae13929d73f253b6f6"
+    path = "processed_data_largesize/output_kmeans/"
+    version1 = "79f11c1a32806d2d3b2b48002c6423280da96f0a"
+    version2 = "05bc443e7e516b9767f6220284d75e2e2a704c1a"
     vers_name = version1[:5]+'-'+version2[:5]
     reverse = False
-    res_c1, res_c2, res_imm_c12, res_imm_c21 = VersionsMapping(workspace + path, version1, version2, reverse)
+    s, l = '0', '1'
+    res_c1, res_c2, res_imm_c12, res_imm_c21 = VersionsMapping(workspace + path, version1, version2, reverse, s, l)
     output_matrix(res_c1, workspace + path, "C1", vers_name)
     output_matrix(res_c2, workspace + path, "C2", vers_name)
     output_matrix(res_imm_c12, workspace + path, "C12", vers_name)
