@@ -1,4 +1,4 @@
-import os
+limport os
 import glob
 from pylab import *
 from scipy.spatial.distance import pdist
@@ -64,7 +64,7 @@ def output_matrix(X, dir, filename, vers_name):
 
 if __name__ == "__main__":
     workspace = "/Users/qiweibao/Downloads/test_automation_test_422/"
-    path = "processed_data_largesize/output_kmeans/"
+    path = "processed_data_largesize/output_spectral/"
     version1 = "79f11c1a32806d2d3b2b48002c6423280da96f0a"
     version2 = "05bc443e7e516b9767f6220284d75e2e2a704c1a"
     vers_name = version1[:5]+'-'+version2[:5]
